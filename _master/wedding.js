@@ -114,7 +114,7 @@ window.WEDDING = {
      message: what opens in the guest's WhatsApp; {name} = guest name from a personal link */
   rsvp: {
     number: "",
-    name: "The Select",
+    name: "the RSVP team",
     deadline: "",
     intro: "Please confirm your presence on WhatsApp, so we can plan your stay with care.",
     message: "Hello! This is {name}. We'd love to confirm our presence for Aanya & Kabir's wedding. Number of guests: "

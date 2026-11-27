@@ -394,7 +394,7 @@
     var msg = String(R.message || 'Hello! I would like to confirm my presence for the wedding.').replace('{name}', guest || '___');
     if (num) {
       btn.href = 'https://wa.me/' + num + '?text=' + encodeURIComponent(msg);
-      alt.textContent = 'Opens a WhatsApp chat with ' + (R.name || 'us') + ' · +' + num;
+      alt.textContent = 'Opens the WhatsApp chat with ' + (R.name || 'the RSVP team');
     } else {
       btn.removeAttribute('href'); btn.setAttribute('aria-disabled', 'true'); btn.style.opacity = '.5'; btn.style.pointerEvents = 'none';
       alt.textContent = W.preview ? 'Preview: the RSVP WhatsApp number is still to be added.' : 'RSVP details coming soon.';

@@ -139,7 +139,7 @@ window.WEDDING = {
      number: country code + number, no + or spaces, e.g. "919876543210"           */
   rsvp: {
     number: "919888278120",
-    name: "Michael G. Singh",
+    name: "the RSVP team",
     deadline: "31 January 2027",
     intro: "Please confirm your presence on WhatsApp by 31 January 2027, so we can plan your stay with care.",
     message: "Hello! This is {name}. We'd love to confirm our presence for Ankit & Shiwangi's wedding (28 Feb – 1 Mar 2027). Number of guests: "
