@@ -130,8 +130,11 @@
     for (var s = 0; s < 260; s++) { x.fillStyle = 'rgba(120,95,65,' + (.18 + Math.random() * .3) + ')'; x.beginPath(); x.arc(Math.random() * 512, Math.random() * 512, .4 + Math.random() * 1.1, 0, 7); x.fill(); }
     var r = document.documentElement.style;
     r.setProperty('--paper-tex', 'url(' + cv.toDataURL('image/png') + ')');
-    r.setProperty('--door-l', 'url("' + ((W.art && W.art.doorPrint) || 'images/door-lotus-') + 'l.png")');
-    r.setProperty('--door-r', 'url("' + ((W.art && W.art.doorPrint) || 'images/door-lotus-') + 'r.png")');
+    // opening card print: "lotus" (default), "plain" (no print) or "sage" (sage florals)
+    var dp = (W.art && W.art.doorPrint) || 'lotus';
+    var pre = dp === 'plain' ? '' : dp === 'sage' ? 'images/door-sage-' : dp === 'lotus' ? 'images/door-lotus-' : dp;
+    r.setProperty('--door-l', pre ? 'url("' + pre + 'l.png")' : 'none');
+    r.setProperty('--door-r', pre ? 'url("' + pre + 'r.png")' : 'none');
   })();
   var FX = window.SELECT_FX;
   var sealImg = (W.theme || {}).sealImage;

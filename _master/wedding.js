@@ -18,7 +18,7 @@ window.WEDDING = {
      Each event gets a small drawn emblem chosen from its name (mandap, mehndi hand, haldi bowl, rings, dhol, cocktail, diya, dinner).
      To choose one yourself, add icon: "mandap" | "mehndi" | "haldi" | "rings" | "dhol" | "cocktail" | "diya" | "dinner" | "lotus" to the event.                                   */
   theme: { palette: "lotus", wax: "#9E2F4E", sealImage: "", iconColor: "theme", artColor: "theme" },   // sealImage: the couple's wax-seal picture, e.g. "images/seal.png" · leave "" for a drawn seal in the wax colour · iconColor: event emblem colour — "ink", "theme", "gold", "sage", "rose" or a colour code
-  art: { venue: "", florals: true, decor: "lotus", events: true },   // events: show the event illustrations (images/event-*.png)   // decor: "lotus" (pink lotus) or "sage" (sage florals)
+  art: { venue: "", florals: true, decor: "lotus", events: true, doorPrint: "lotus" },   // doorPrint: opening card "lotus" | "plain" | "sage" · decor: side border "lotus" | "sage" (florals: false = none)
 
   /* true = shows the colour switcher (for The Select only). Set false before sharing with guests. */
   preview: true,

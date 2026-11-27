@@ -24,13 +24,25 @@ The design follows The Select's watercolour reference: cream paper, gold script 
 2. Claude copies `_master` to a new folder such as `niharika-akshay/` and publishes it.
 3. You get the guest link: `https://invite.selectindia.co/niharika-akshay`
 
-**Questions per wedding:**
-1. Palette (or "you choose"), plus the venue watercolour artwork
-2. WhatsApp number for RSVPs, and whose name it is
-3. Blessing line (Shree Ganeshaya Namah / Ik Onkar / none / other)
-4. RSVP deadline
-5. Families' names, if they should appear
-6. Optional: venue photos for the Gallery, and dress codes
+**Taken from the wedding tracker automatically:** couple's names, venue, dates, events and start times.
+
+**Round 1 – the look**
+1. Colour palette (21 to choose from)
+2. Opening card: lotus gatefold · plain handmade paper · sage floral gatefold
+3. Side decoration: growing lotus border · sage floral border · none
+4. Music: default "Na Tum Jano Na Hum" · couple's own MP3 · none
+
+**Round 2 – the details**
+5. Wax seal: couple's seal image · drawn wax seal (colour of choice)
+6. Blessing line: Shree Ganeshaya Namah · Ik Onkar · none · other
+7. RSVP WhatsApp number (and whose it is)
+8. RSVP deadline
+
+**Round 3 – the extras**
+9. Venue artwork (watercolour of the venue) or none
+10. Event illustrations: matched to the theme · original colours
+11. Which event the wardrobe models are dressed for
+12. Wardrobe colour palettes per event (or set them in the preview)
 
 ## Before sharing with guests
 
