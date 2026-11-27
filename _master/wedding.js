@@ -10,7 +10,9 @@
 window.WEDDING = {
 
   /* ---------- Look & feel ----------
-     palette: "lotus" | "champagne" | "select" | "royal" | "emerald" | "rose" | "ocean"
+     palette: "lotus" | "champagne" | "select" | "royal" | "rose" | "ocean" |
+              "navyBlush" | "sageChampagne" | "dustyBlue" | "burgundyGold" | "terracotta" | "emerald" | "lavenderSage" | "mocha" |
+              "butterBlue" | "blackWhite" | "peachCoral" | "mauveTaupe" | "forestRust" | "cherryBlush" | "champagnePearl"
      art.venue: a watercolour of the venue (wide image, about 3:1) in the images folder, e.g. "images/venue-art.jpg"
      art.florals: true shows the sage floral corners and side borders
      Each event gets a small drawn emblem chosen from its name (mandap, mehndi hand, haldi bowl, rings, dhol, cocktail, diya, dinner).

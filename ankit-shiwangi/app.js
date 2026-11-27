@@ -11,9 +11,23 @@
     champagne: { label: 'Champagne & Sage', paper: '#F8EBD8', paper2: '#F2E2C9', gold: '#A7843E', line: '#C9AE78', sage: '#7C8455', ink: '#5A4A30', muted: '#8A7A5E', btnInk: '#FFF8EC' },
     select:    { label: 'Sage & Copper (The Select)', paper: '#FBF1EA', paper2: '#F1DBD0', gold: '#B0692D', line: '#D7A57A', sage: '#8A9468', ink: '#4F4535', muted: '#84776A', btnInk: '#FFF6EF' },
     royal:     { label: 'Royal Maroon & Gold', paper: '#FBF1E6', paper2: '#F1DCCB', gold: '#7E2230', line: '#C6A263', sage: '#9C7A3C', ink: '#4A2A2A', muted: '#86685F', btnInk: '#FCEFD9' },
-    emerald:   { label: 'Emerald & Gold', paper: '#F6F2E6', paper2: '#E8E6D2', gold: '#2F5E4E', line: '#BFA265', sage: '#6E7F5E', ink: '#2E3B33', muted: '#6C7666', btnInk: '#F7F1DE' },
     rose:      { label: 'Rose & Blush', paper: '#FCEFEA', paper2: '#F5DCD6', gold: '#A35E6B', line: '#D9AFA6', sage: '#8F8A6A', ink: '#5A3A40', muted: '#8E7177', btnInk: '#FFF4F1' },
-    ocean:     { label: 'Ocean & Sand', paper: '#F5F1E8', paper2: '#E4E9E4', gold: '#2E6070', line: '#C2A66E', sage: '#6F8C88', ink: '#2C3D42', muted: '#6B7A7D', btnInk: '#F4F0E4' }
+    ocean:     { label: 'Ocean & Sand', paper: '#F5F1E8', paper2: '#E4E9E4', gold: '#2E6070', line: '#C2A66E', sage: '#6F8C88', ink: '#2C3D42', muted: '#6B7A7D', btnInk: '#F4F0E4' },
+    navyBlush:     { label: 'Navy & Blush', paper: '#FBF5F2', paper2: '#EDD2CA', gold: '#1E3145', line: '#D7ADA8', sage: '#C98F89', ink: '#1E3145', muted: '#6B6F7D', btnInk: '#FBF5F2' },
+    sageChampagne: { label: 'Sage & Champagne', paper: '#FAF6EE', paper2: '#ECDEC8', gold: '#6E7A5C', line: '#CFD0BC', sage: '#9DA78D', ink: '#3D4234', muted: '#7A7D6E', btnInk: '#FAF6EE' },
+    dustyBlue:     { label: 'Dusty Blue & Ivory', paper: '#FAF7F1', paper2: '#E4DBCF', gold: '#4F6A80', line: '#C5D0D8', sage: '#8399AB', ink: '#2E3A45', muted: '#6F7A84', btnInk: '#FAF7F1' },
+    burgundyGold:  { label: 'Burgundy & Gold', paper: '#FBF6EE', paper2: '#F0E2CC', gold: '#6E1F27', line: '#E2C387', sage: '#B08A3E', ink: '#3A1518', muted: '#7E5F5A', btnInk: '#FBF6EE' },
+    terracotta:    { label: 'Terracotta & Cream', paper: '#FCF7F0', paper2: '#F4E6D0', gold: '#A9623A', line: '#E0B48F', sage: '#D4966B', ink: '#4A2E1F', muted: '#8A6E5C', btnInk: '#FCF7F0' },
+    emerald:       { label: 'Emerald & Gold', paper: '#FAF6EE', paper2: '#EFE2CC', gold: '#365642', line: '#DFC084', sage: '#6C886D', ink: '#26362B', muted: '#6B7566', btnInk: '#FAF6EE' },
+    lavenderSage:  { label: 'Lavender & Sage', paper: '#FBF7F2', paper2: '#F4E7D3', gold: '#7A6A8A', line: '#D3C6D4', sage: '#9FA98A', ink: '#3E3548', muted: '#7E7684', btnInk: '#FBF7F2' },
+    mocha:         { label: 'Mocha & Cream', paper: '#FBF7F0', paper2: '#F3E5CF', gold: '#7E6650', line: '#CDB499', sage: '#9A8066', ink: '#3E3126', muted: '#85735F', btnInk: '#FBF7F0' },
+    butterBlue:    { label: 'Butter Yellow & Blue', paper: '#FFFBF2', paper2: '#F9E6B5', gold: '#5E7895', line: '#F2D98E', sage: '#A0B1C2', ink: '#2F3D4C', muted: '#6D7A88', btnInk: '#FFFBF2' },
+    blackWhite:    { label: 'Black & White', paper: '#FBFAF8', paper2: '#EFEDE9', gold: '#111111', line: '#CFCCC6', sage: '#3E3E3E', ink: '#111111', muted: '#6E6C69', btnInk: '#FBFAF8' },
+    peachCoral:    { label: 'Peach & Coral', paper: '#FFF8F3', paper2: '#F5DCCA', gold: '#CF7656', line: '#EDB8AA', sage: '#E7AA88', ink: '#4A3029', muted: '#8E7068', btnInk: '#FFF8F3' },
+    mauveTaupe:    { label: 'Mauve & Taupe', paper: '#FAF6F3', paper2: '#EADFD6', gold: '#956876', line: '#CAACAE', sage: '#B7AA9E', ink: '#43353A', muted: '#85777A', btnInk: '#FAF6F3' },
+    forestRust:    { label: 'Forest Green & Rust', paper: '#FAF6EF', paper2: '#E9DAC4', gold: '#4F5E48', line: '#DEC8AC', sage: '#A15F33', ink: '#2E3729', muted: '#75705F', btnInk: '#FAF6EF' },
+    cherryBlush:   { label: 'Cherry Red & Blush', paper: '#FDF7F4', paper2: '#EFDCD1', gold: '#962F2F', line: '#EDCEC5', sage: '#C46A62', ink: '#3E1F1F', muted: '#87696A', btnInk: '#FDF7F4' },
+    champagnePearl:{ label: 'Champagne & Pearl', paper: '#FCFAF6', paper2: '#EDE6DB', gold: '#9C7F57', line: '#E0CBAF', sage: '#C9B08C', ink: '#4A3F33', muted: '#857A6C', btnInk: '#FCFAF6' }
   };
 
   var $ = function (s, r) { return (r || document).querySelector(s); };
