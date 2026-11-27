@@ -16,7 +16,15 @@ Each wedding folder is self-contained. Changing one wedding never affects anothe
 The design follows The Select's watercolour reference: cream paper, gold script names, engraved-style capitals and sage floral corners. Each wedding has two choices:
 
 - **Venue artwork** (`art.venue`): a wide watercolour of that wedding's venue, about 3:1, saved as `images/venue-art.jpg`. This is the centrepiece of the page. Without one, the page still works with florals and typography only.
-- **Colour palette** (`theme.palette`): `champagne` Champagne & Sage (default) · `select` Sage & Copper · `royal` Royal Maroon & Gold · `emerald` Emerald & Gold · `rose` Rose & Blush · `ocean` Ocean & Sand. While `preview: true` is set, a **Colours** button lets you try them all live.
+- **Theme** (`theme.pack`): the page layout is always the same; the theme changes the graphics. Each theme brings its own growing side border, opening-card print, faint background pattern, ornament, petal shower and a matching palette:
+  - `lotus` Lotus Garden – pink lotuses and lily pads, rose-petal shower
+  - `palace` Royal Palace – marigold and jasmine vine, Mughal jaali print, marigold-petal shower (Rajasthan, Udaipur, palaces)
+  - `beach` Beach & Tropical – monstera, palm fronds and frangipani, tropical leaf print, frangipani shower (Goa, Thailand, Vietnam, Bali)
+  - `hillside` Hillside Garden – climbing roses and wildflowers, botanical sprig print, blush-petal shower (Kasauli, Mussoorie, Europe)
+  - `arabian` Arabian Luxe – white roses on gold and sage eucalyptus, eight-point star lattice, pearl-petal shower (Dubai, Abu Dhabi, RAK)
+  Switch a wedding's theme any time: change `theme.pack` and republish; the guest link stays the same.
+- **Colour palette** (`theme.palette`): leave `""` to use the theme's own, or pick any of the 21 palettes. While `preview: true` is set, a **Theme & colours** button lets you flip through all themes and palettes live, and replay the opening.
+- **Demo of every theme:** https://invite.selectindia.co/demo (add `?theme=palace`, `beach`, `hillside` or `arabian`).
 
 ## Making a new wedding
 
@@ -27,9 +35,9 @@ The design follows The Select's watercolour reference: cream paper, gold script 
 **Taken from the wedding tracker automatically:** couple's names, venue, dates, events and start times.
 
 **Round 1 – the look**
-1. Colour palette (21 to choose from)
-2. Opening card: lotus gatefold · plain handmade paper · sage floral gatefold
-3. Side decoration: growing lotus border · sage floral border · none
+1. Theme: Lotus Garden · Royal Palace · Beach & Tropical · Hillside Garden · Arabian Luxe (the colour palette follows the theme unless you choose another of the 21)
+2. Opening card: the theme's own print · plain handmade paper · (lotus / sage prints also available)
+3. Side decoration: the theme's growing border · sage floral border · none
 4. Music: default "Na Tum Jano Na Hum" · couple's own MP3 · none
 
 **Round 2 – the details**
