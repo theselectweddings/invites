@@ -15,7 +15,7 @@ window.WEDDING = {
      art.florals: true shows the sage floral corners and side borders
      Each event gets a small drawn emblem chosen from its name (mandap, mehndi hand, haldi bowl, rings, dhol, cocktail, diya, dinner).
      To choose one yourself, add icon: "mandap" | "mehndi" | "haldi" | "rings" | "dhol" | "cocktail" | "diya" | "dinner" | "lotus" to the event.                                   */
-  theme: { palette: "lotus", wax: "#9E2F4E", sealImage: "images/seal.png" },   // sealImage: the couple's own wax-seal picture (or "" to use a drawn seal in the wax colour)
+  theme: { palette: "lotus", wax: "#9E2F4E", sealImage: "images/seal.png", iconColor: "theme" },   // sealImage: the couple's own wax-seal picture (or "" for a drawn seal) · iconColor: event emblem colour — "ink", "theme", "gold", "sage", "rose" or any colour code like "#B08A3E"
   art: { venue: "images/venue-art.jpg", florals: true, decor: "lotus" },   // decor: "lotus" (pink lotus) or "sage" (sage florals)
 
   /* true = shows the colour switcher (for The Select only). Set false before sharing with guests. */
@@ -34,6 +34,7 @@ window.WEDDING = {
   /* ---------- Dates ---------- */
   dates: {
     display: "February 28 & March 1, 2027",
+    reveal: ["Monday", "1st March", "2027"],     // shown on the scratch card
     countdownTo: "2027-03-01T17:00:00+05:30"
   },
 
@@ -41,6 +42,8 @@ window.WEDDING = {
   text: {
     request: "Request the pleasure of your company as they celebrate their wedding",
     welcomeBody: "Amidst the Aravalli hills, we begin our forever — with mehndi in the sunshine, a night of music and dance, and vows around the sacred fire. Your blessings and your presence would make it complete.",
+    revealTitle: "Save the date",
+    revealHint: "Scratch the card to reveal",
     countdownTitle: "Countdown to our wedding",
     eventsTitle: "Wedding events",
     rsvpTitle: "Kindly RSVP"
@@ -127,7 +130,7 @@ window.WEDDING = {
   music: "default",   // "default" = Na Tum Jano Na Hum · or your own MP3, e.g. "images/our-song.mp3" · or "none" for no music
 
   show: {
-    welcome: true, families: true, countdown: true,
+    welcome: true, reveal: true, families: true, countdown: true,
     events: true, venue: true, gallery: true, rsvp: true, contacts: true
   }
 };

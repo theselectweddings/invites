@@ -39,6 +39,10 @@
     r.setProperty('--btn-ink', p.btnInk);
   }
   applyPalette();
+  var ICON_COLOURS = { ink: ['Ink', 'var(--ink)'], theme: ['Theme colour', 'var(--gold)'], gold: ['Gold', '#B08A3E'], sage: ['Sage', '#6F8A4A'], rose: ['Rose', '#C2456A'] };
+  function applyIconColour(k) { var c = ICON_COLOURS[k] ? ICON_COLOURS[k][1] : (k || 'var(--ink)'); document.documentElement.style.setProperty('--icon', c); }
+  var iconCol = (W.theme || {}).iconColor || 'ink';
+  applyIconColour(iconCol);
 
   /* ---------- artwork ---------- */
   var art = W.art || {};
@@ -103,6 +107,69 @@
     if (audio.paused) { audio.play().catch(function () {}); mbtn.classList.remove('off'); mbtn.setAttribute('aria-label', 'Pause music'); }
     else { audio.pause(); mbtn.classList.add('off'); mbtn.setAttribute('aria-label', 'Play music'); }
   });
+
+
+  /* ---------- scratch card: reveal the date ---------- */
+  (function () {
+    var box = $('#scratch'), cv = $('#scratchCanvas'), dateBox = $('#scratchDate');
+    var rv = (W.dates && W.dates.reveal) || [];
+    if (!rv.length || show.reveal === false) { $('#reveal').hidden = true; return; }
+    rv.forEach(function (t, i) { dateBox.appendChild(i === 1 ? el('strong', '', t) : el('span', '', t)); });
+    var ctx = cv.getContext('2d'), drawing = false, done = false, last = null;
+    var foil = (W.theme && W.theme.foil) || ['#F3DC9A', '#C99A3E', '#E9C979', '#A87A2C'];
+    function paint() {
+      if (done) return;
+      var w = box.clientWidth, h = box.clientHeight, d = window.devicePixelRatio || 1;
+      if (!w) return;
+      cv.width = w * d; cv.height = h * d; ctx.setTransform(d, 0, 0, d, 0, 0);
+      ctx.globalCompositeOperation = 'source-over';
+      var g = ctx.createLinearGradient(0, 0, w, h);
+      g.addColorStop(0, foil[0]); g.addColorStop(.35, foil[1]); g.addColorStop(.6, foil[2]); g.addColorStop(1, foil[3]);
+      ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+      var sh = ctx.createLinearGradient(0, h, w, 0);
+      sh.addColorStop(.3, 'rgba(255,255,255,0)'); sh.addColorStop(.5, 'rgba(255,250,230,.45)'); sh.addColorStop(.7, 'rgba(255,255,255,0)');
+      ctx.fillStyle = sh; ctx.fillRect(0, 0, w, h);
+      for (var k = 0; k < 1400; k++) { ctx.fillStyle = 'rgba(255,255,255,' + (Math.random() * .16) + ')'; ctx.fillRect(Math.random() * w, Math.random() * h, 1.4, 1.4); }
+      ctx.strokeStyle = 'rgba(255,248,225,.75)'; ctx.lineWidth = 1; ctx.strokeRect(9, 9, w - 18, h - 18);
+      ctx.fillStyle = 'rgba(255,252,240,.97)'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.font = '400 46px "Pinyon Script", cursive'; ctx.fillText(W.couple.monogram || '', w / 2, h / 2 - 10);
+      ctx.font = '500 11px "Cormorant Garamond", serif';
+      var label = 'SCRATCH TO REVEAL'; ctx.letterSpacing = '3px'; ctx.fillText(label, w / 2, h / 2 + 34);
+    }
+    function pos(e) { var b = cv.getBoundingClientRect(); return { x: e.clientX - b.left, y: e.clientY - b.top }; }
+    function scratch(p) {
+      ctx.globalCompositeOperation = 'destination-out'; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.lineWidth = 44;
+      ctx.beginPath(); ctx.moveTo((last || p).x, (last || p).y); ctx.lineTo(p.x, p.y); ctx.stroke(); last = p;
+    }
+    function check() {
+      var data = ctx.getImageData(0, 0, cv.width, cv.height).data, clear = 0, n = 0;
+      for (var j = 3; j < data.length; j += 64) { n++; if (data[j] < 128) clear++; }
+      if (clear / n > .5) finish();
+    }
+    function finish() {
+      if (done) return; done = true; box.classList.add('done');
+      if (reduce) return;
+      var cols = [PALETTES[pal].gold, foil[1], '#E5698E', foil[0]];
+      for (var i = 0; i < 28; i++) {
+        var s = el('i', 'spark'); s.style.background = cols[i % 4]; box.appendChild(s);
+        (function (s) {
+          requestAnimationFrame(function () { requestAnimationFrame(function () {
+            var an = Math.random() * Math.PI * 2, ds = 70 + Math.random() * 110;
+            s.style.transform = 'translate(' + Math.cos(an) * ds + 'px,' + Math.sin(an) * ds + 'px) scale(' + (.4 + Math.random()) + ')'; s.style.opacity = '0';
+          }); });
+          setTimeout(function () { s.remove(); }, 1400);
+        })(s);
+      }
+    }
+    cv.addEventListener('pointerdown', function (e) { if (done) return; drawing = true; last = null; try { cv.setPointerCapture(e.pointerId); } catch (x) {} scratch(pos(e)); });
+    cv.addEventListener('pointermove', function (e) { if (drawing) scratch(pos(e)); });
+    cv.addEventListener('pointerup', function () { if (drawing) { drawing = false; check(); } });
+    cv.addEventListener('pointercancel', function () { drawing = false; });
+    cv.tabIndex = 0;
+    cv.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); finish(); } });
+    var ro = new ResizeObserver(paint); ro.observe(box);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(paint);
+  })();
 
   /* ---------- countdown ---------- */
   (function () {
@@ -218,6 +285,13 @@
       b.setAttribute('aria-pressed', String(k === pal));
       b.addEventListener('click', function () { pal = k; $$('#palList button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); applyPalette(); });
       $('#palList').appendChild(b);
+    });
+    Object.keys(ICON_COLOURS).forEach(function (k) {
+      var b = el('button'); b.type = 'button';
+      var dot = el('span', 'studio__dot'); dot.style.background = ICON_COLOURS[k][1]; b.appendChild(dot); b.appendChild(document.createTextNode(ICON_COLOURS[k][0]));
+      b.setAttribute('aria-pressed', String(k === iconCol));
+      b.addEventListener('click', function () { iconCol = k; $$('#iconList button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); applyIconColour(k); });
+      $('#iconList').appendChild(b);
     });
   }
 

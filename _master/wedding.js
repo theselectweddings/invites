@@ -15,7 +15,7 @@ window.WEDDING = {
      art.florals: true shows the sage floral corners and side borders
      Each event gets a small drawn emblem chosen from its name (mandap, mehndi hand, haldi bowl, rings, dhol, cocktail, diya, dinner).
      To choose one yourself, add icon: "mandap" | "mehndi" | "haldi" | "rings" | "dhol" | "cocktail" | "diya" | "dinner" | "lotus" to the event.                                   */
-  theme: { palette: "lotus", wax: "#9E2F4E", sealImage: "" },   // sealImage: the couple's wax-seal picture, e.g. "images/seal.png" · leave "" for a drawn seal in the wax colour
+  theme: { palette: "lotus", wax: "#9E2F4E", sealImage: "", iconColor: "theme" },   // sealImage: the couple's wax-seal picture, e.g. "images/seal.png" · leave "" for a drawn seal in the wax colour · iconColor: event emblem colour — "ink", "theme", "gold", "sage", "rose" or a colour code
   art: { venue: "", florals: true, decor: "lotus" },   // decor: "lotus" (pink lotus) or "sage" (sage florals)
 
   /* true = shows the colour switcher (for The Select only). Set false before sharing with guests. */
@@ -30,12 +30,15 @@ window.WEDDING = {
      countdownTo time zones: +05:30 India · +04:00 Dubai · +07:00 Thailand/Vietnam · +08:00 Malaysia/Bali · +01:00 Europe (winter) · +02:00 Europe (summer) */
   dates: {
     display: "February 14 & 15, 2027",
+    reveal: ["Monday", "15th February", "2027"],   // shown on the scratch card
     countdownTo: "2027-02-15T19:00:00+05:30"
   },
 
   text: {
     request: "Request the pleasure of your company as they celebrate their wedding",
     welcomeBody: "With the blessings of our elders, we are beginning our journey together — and it would mean the world to celebrate it with you.",
+    revealTitle: "Save the date",
+    revealHint: "Scratch the card to reveal",
     countdownTitle: "Countdown to our wedding",
     eventsTitle: "Wedding events",
     rsvpTitle: "Kindly RSVP"
@@ -98,5 +101,5 @@ window.WEDDING = {
   contacts: [],   // e.g. [{ name: "Shikha Sharma", role: "Event adviser · The Select", whatsapp: "91XXXXXXXXXX" }]
   music: "default",   // "default" = Na Tum Jano Na Hum · or your own MP3, e.g. "images/our-song.mp3" · or "none" for no music
 
-  show: { welcome: true, families: true, countdown: true, events: true, venue: true, gallery: true, rsvp: true, contacts: true }
+  show: { welcome: true, reveal: true, families: true, countdown: true, events: true, venue: true, gallery: true, rsvp: true, contacts: true }
 };

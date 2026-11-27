@@ -59,6 +59,15 @@
     <p class="welcome" data-k="text.welcomeBody"></p>
   </section>
 
+  <section class="sec" id="reveal">
+    <h2 class="head"><span data-k="text.revealTitle"></span></h2>
+    <div class="scratch" id="scratch">
+      <div class="scratch__date" id="scratchDate"></div>
+      <canvas id="scratchCanvas" aria-label="Scratch to reveal the date"></canvas>
+    </div>
+    <p class="caps caps--soft scratch__hint" data-k="text.revealHint"></p>
+  </section>
+
   <section class="sec" id="countdown">
     <h2 class="head"><span data-k="text.countdownTitle"></span></h2>
     <div class="count" id="count">
@@ -124,6 +133,8 @@
   <div class="studio__panel" id="studioPanel" hidden>
     <p class="studio__h">Colour palette</p>
     <div class="studio__row" id="palList"></div>
+    <p class="studio__h">Event emblem colour</p>
+    <div class="studio__row studio__row--chips" id="iconList"></div>
     <p class="studio__note">Preview only — guests never see this panel.</p>
   </div>
 </aside>
