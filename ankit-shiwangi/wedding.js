@@ -1,6 +1,6 @@
 /* =====================================================================
    THE SELECT · WEDDING INVITATION — CONTENT FILE
-   Ankit & Shivangi · ITC Grand Bharat · 28 Feb – 1 Mar 2027
+   Ankit & Shiwangi · ITC Grand Bharat · 28 Feb – 1 Mar 2027
    ---------------------------------------------------------------------
    This is the ONLY file that changes per wedding.
    • Keep the quotes "..." and the commas at line ends.
@@ -22,7 +22,7 @@ window.WEDDING = {
   /* ---------- The couple ---------- */
   couple: {
     first: "Ankit",
-    second: "Shivangi",
+    second: "Shiwangi",
     monogram: "AS",
     hashtag: ""
   },
@@ -116,7 +116,7 @@ window.WEDDING = {
     name: "The Select",
     deadline: "31 January 2027",
     intro: "Please confirm your presence on WhatsApp by 31 January 2027, so we can plan your stay with care.",
-    message: "Hello! This is {name}. We'd love to confirm our presence for Ankit & Shivangi's wedding (28 Feb – 1 Mar 2027). Number of guests: "
+    message: "Hello! This is {name}. We'd love to confirm our presence for Ankit & Shiwangi's wedding (28 Feb – 1 Mar 2027). Number of guests: "
   },
 
   /* ---------- Optional extra contacts (WhatsApp) ---------- */

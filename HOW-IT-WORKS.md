@@ -7,7 +7,7 @@ One master template, and one folder per wedding. Every invitation opens like a c
 | Folder | What it is |
 |---|---|
 | `_master/` | The blank template. Copy it for every new wedding. |
-| `ankit-shivangi/` | Ankit & Shivangi, ITC Grand Bharat, 28 Feb – 1 Mar 2027 |
+| `ankit-shiwangi/` | Ankit & Shiwangi, ITC Grand Bharat, 28 Feb – 1 Mar 2027 |
 
 Each wedding folder is self-contained. Changing one wedding never affects another.
 
@@ -43,4 +43,4 @@ Ask Claude for the change (timings, a new event, colours, photos, the RSVP numbe
 
 ## Personal links
 
-Add `?to=` and the guest's name to the link, for example `…/ankit-shivangi?to=Sharma%20Family`. The invite then opens with "Dear Sharma Family," and the WhatsApp message is filled in with their name.
+Add `?to=` and the guest's name to the link, for example `…/ankit-shiwangi?to=Sharma%20Family`. The invite then opens with "Dear Sharma Family," and the WhatsApp message is filled in with their name.
