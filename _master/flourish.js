@@ -268,5 +268,21 @@
       '<g' + (side === 'r' ? ' transform="translate(130 0) scale(-1 1)"' : '') + '>' + body + '</g></svg>';
   }
 
-  window.SELECT_FX = { garden: garden, waxSeal: waxSeal, petalShower: petalShower, eventIcon: eventIcon, icons: Object.keys(ICONS) };
+  /* event illustrations (images/event-*.png) chosen from the event name */
+  var ART = [
+    [/anand karaj|gurdwara|gurudwara|lavan/i, 'anandkaraj'],
+    [/wedding|phera|baraat|mandap|vivah|shaadi|ceremony/i, 'pheras'],
+    [/mehndi|mehendi|henna/i, 'mehndi'],
+    [/haldi|pithi|ubtan/i, 'haldi'],
+    [/after|party|cocktail|reception/i, 'afterparty'],
+    [/sangeet|engagement|ring|music|dance|garba/i, 'sangeet']
+  ];
+  function eventArt(ev) {
+    if (ev.art === 'none') return '';
+    if (ev.art) return ev.art.indexOf('/') > -1 ? ev.art : 'images/event-' + ev.art + '.png';
+    for (var i = 0; i < ART.length; i++) if (ART[i][0].test(ev.name || '')) return 'images/event-' + ART[i][1] + '.png';
+    return '';
+  }
+
+  window.SELECT_FX = { eventArt: eventArt, garden: garden, waxSeal: waxSeal, petalShower: petalShower, eventIcon: eventIcon, icons: Object.keys(ICONS) };
 })();

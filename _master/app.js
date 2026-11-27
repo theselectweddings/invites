@@ -33,8 +33,18 @@
   }
 
   var pal = PALETTES[(W.theme || {}).palette] ? W.theme.palette : 'lotus';
+  var tintSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  tintSvg.setAttribute('width', '0'); tintSvg.setAttribute('height', '0'); tintSvg.style.position = 'absolute';
+  tintSvg.innerHTML = '<filter id="artTint" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0" result="g"/><feComponentTransfer in="g" result="m"><feFuncR type="table"/><feFuncG type="table"/><feFuncB type="table"/></feComponentTransfer><feComposite in="m" in2="SourceGraphic" operator="arithmetic" k2=".75" k3=".25"/></filter>';
+  document.body.appendChild(tintSvg);
+  function hexRGB(h) { var n = parseInt(h.slice(1), 16); return [(n >> 16) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255]; }
+  function tintFromPalette(p) {
+    var stops = [p.ink, p.gold, p.line, '#FFFDFA'].map(hexRGB);
+    ['R', 'G', 'B'].forEach(function (c, i) { tintSvg.querySelector('feFunc' + c).setAttribute('tableValues', stops.map(function (s) { return s[i].toFixed(3); }).join(' ')); });
+  }
   function applyPalette() {
     var p = PALETTES[pal], r = document.documentElement.style;
+    tintFromPalette(p);
     ['paper', 'paper2', 'gold', 'line', 'sage', 'ink', 'muted'].forEach(function (k) { r.setProperty('--' + k, p[k]); });
     r.setProperty('--btn-ink', p.btnInk);
   }
@@ -42,6 +52,9 @@
   var ICON_COLOURS = { ink: ['Ink', 'var(--ink)'], theme: ['Theme colour', 'var(--gold)'], gold: ['Gold', '#B08A3E'], sage: ['Sage', '#6F8A4A'], rose: ['Rose', '#C2456A'] };
   function applyIconColour(k) { var c = ICON_COLOURS[k] ? ICON_COLOURS[k][1] : (k || 'var(--ink)'); document.documentElement.style.setProperty('--icon', c); }
   var iconCol = (W.theme || {}).iconColor || 'ink';
+  var artCol = (W.theme || {}).artColor || 'theme';
+  function applyArtColour(k) { document.documentElement.classList.toggle('art-original', k === 'original'); }
+  applyArtColour(artCol);
   applyIconColour(iconCol);
 
   /* ---------- artwork ---------- */
@@ -212,7 +225,9 @@
     col.appendChild(withOrdinals(el('p', 'day__date'), day.date));
     (day.events || []).forEach(function (ev) {
       var e = el('div', 'ev');
-      if (FX) { var ic = el('div', 'ev__icon'); ic.innerHTML = FX.eventIcon(ev); e.appendChild(ic); }
+      var artSrc = FX && art.events !== false ? FX.eventArt(ev) : '';
+      if (artSrc) { var ai = el('img', 'ev__art'); ai.src = artSrc; ai.alt = ''; ai.loading = 'lazy'; e.appendChild(ai); }
+      else if (FX) { var ic = el('div', 'ev__icon'); ic.innerHTML = FX.eventIcon(ev); e.appendChild(ic); }
       e.appendChild(el('h3', '', ev.name));
       e.appendChild(el('p', 'ev__time', ev.time));
       if (ev.venue && ev.venue !== W.venue.name) e.appendChild(el('p', 'ev__dress', ev.venue));
@@ -285,6 +300,11 @@
       b.setAttribute('aria-pressed', String(k === pal));
       b.addEventListener('click', function () { pal = k; $$('#palList button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); applyPalette(); });
       $('#palList').appendChild(b);
+    });
+    [['theme', 'Match the theme'], ['original', 'Original colours']].forEach(function (o) {
+      var b = el('button', '', o[1]); b.type = 'button'; b.setAttribute('aria-pressed', String(o[0] === artCol));
+      b.addEventListener('click', function () { artCol = o[0]; $$('#artList button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); applyArtColour(o[0]); });
+      $('#artList').appendChild(b);
     });
     Object.keys(ICON_COLOURS).forEach(function (k) {
       var b = el('button'); b.type = 'button';

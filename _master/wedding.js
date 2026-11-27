@@ -15,8 +15,8 @@ window.WEDDING = {
      art.florals: true shows the sage floral corners and side borders
      Each event gets a small drawn emblem chosen from its name (mandap, mehndi hand, haldi bowl, rings, dhol, cocktail, diya, dinner).
      To choose one yourself, add icon: "mandap" | "mehndi" | "haldi" | "rings" | "dhol" | "cocktail" | "diya" | "dinner" | "lotus" to the event.                                   */
-  theme: { palette: "lotus", wax: "#9E2F4E", sealImage: "", iconColor: "theme" },   // sealImage: the couple's wax-seal picture, e.g. "images/seal.png" · leave "" for a drawn seal in the wax colour · iconColor: event emblem colour — "ink", "theme", "gold", "sage", "rose" or a colour code
-  art: { venue: "", florals: true, decor: "lotus" },   // decor: "lotus" (pink lotus) or "sage" (sage florals)
+  theme: { palette: "lotus", wax: "#9E2F4E", sealImage: "", iconColor: "theme", artColor: "theme" },   // sealImage: the couple's wax-seal picture, e.g. "images/seal.png" · leave "" for a drawn seal in the wax colour · iconColor: event emblem colour — "ink", "theme", "gold", "sage", "rose" or a colour code
+  art: { venue: "", florals: true, decor: "lotus", events: true },   // events: show the event illustrations (images/event-*.png)   // decor: "lotus" (pink lotus) or "sage" (sage florals)
 
   /* true = shows the colour switcher (for The Select only). Set false before sharing with guests. */
   preview: true,
@@ -55,6 +55,7 @@ window.WEDDING = {
   /* ---------- Events, one column per day ----------
      date: "14th February, 2027" (st/nd/rd/th become small superscripts)
      moments: optional ["time", "what happens"] list shown under "View programme"
+     art: optional illustration — "mehndi" | "sangeet" | "haldi" | "pheras" | "anandkaraj" | "afterparty" | "none" (otherwise chosen from the event name)
      dress: optional dress code · start/end: for the "Add to calendar" link          */
   days: [
     {
