@@ -74,20 +74,19 @@ main,.opening{position:relative;z-index:1}
 .opening__centre{position:relative;z-index:2;text-align:center;transition:opacity .6s;padding:24px}
 .opening__dear{font:italic 400 20px/1.4 var(--serif);color:var(--muted);margin:0 0 10px}
 .opening__hint{margin-top:26px;font-size:12px;animation:breathe 2.6s ease-in-out infinite}
-.seal{position:relative;display:grid;place-items:center;width:128px;height:128px;margin:26px auto 0;border:0;border-radius:50%;cursor:pointer;
-  background:radial-gradient(circle at 34% 28%,color-mix(in srgb,var(--gold) 45%,#fff) 0%,var(--gold) 45%,color-mix(in srgb,var(--gold) 65%,#000) 100%);
-  box-shadow:0 12px 28px -8px rgba(70,50,15,.5),inset 0 -6px 12px rgba(0,0,0,.2),inset 0 3px 8px rgba(255,255,255,.35);transition:transform .25s}
-.seal:hover{transform:scale(1.04)}
-.seal:focus-visible{outline:2px solid var(--gold);outline-offset:6px}
-.seal__ring{position:absolute;inset:11px;border-radius:50%;border:1px solid rgba(255,250,235,.6)}
-.seal__mono{position:relative;font:400 44px/1 var(--script);color:#FFF8EA;text-shadow:0 1px 1px rgba(0,0,0,.25)}
+.seal{position:relative;display:block;width:clamp(150px,34vw,180px);aspect-ratio:1;margin:18px auto 0;padding:0;border:0;background:none;cursor:pointer;transition:transform .3s ease;-webkit-tap-highlight-color:transparent}
+.seal svg{display:block;width:100%;height:100%;overflow:visible}
+.seal:hover{transform:scale(1.04) rotate(-2deg)}
+.seal:active{transform:scale(.97)}
+.seal:focus-visible{outline:2px solid var(--gold);outline-offset:4px;border-radius:50%}
+.opening.open .seal{transform:scale(1.15);transition:transform .6s ease}
 @keyframes breathe{50%{opacity:.35}}
 
-.music{position:fixed;right:16px;bottom:16px;z-index:40;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--paper);display:flex;gap:3px;align-items:flex-end;justify-content:center;padding-bottom:14px;cursor:pointer}
-.music span{width:3px;height:15px;background:var(--gold);animation:eq 1s ease-in-out infinite}
-.music span:nth-child(2){animation-delay:.2s}.music span:nth-child(3){animation-delay:.4s}
-.music.off span{animation:none;height:4px}
-@keyframes eq{50%{height:5px}}
+.music{position:fixed;right:16px;bottom:16px;z-index:40;width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:color-mix(in srgb,var(--paper) 92%,#fff);color:var(--gold);display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px -8px rgba(80,60,20,.45)}
+.music svg{width:22px;height:22px;animation:spinNote 6s linear infinite}
+.music.off svg{animation:none;opacity:.45}
+.music.off::after{content:"";position:absolute;width:26px;height:1.5px;background:var(--gold);transform:rotate(-45deg)}
+@keyframes spinNote{50%{transform:scale(1.08)}}
 
 /* ---------- hero ---------- */
 .hero{position:relative;text-align:center;padding:26px 20px 0;overflow:hidden}
@@ -212,3 +211,17 @@ main>.hero,main>.foot{z-index:auto}
   main::before,main::after{width:52px;opacity:.75}
   .sec{padding-left:52px;padding-right:52px}
 }
+
+/* ---------- rose petal shower ---------- */
+.petal-rain{position:fixed;inset:0;z-index:80;pointer-events:none;overflow:hidden;transition:opacity 1.4s}
+.petal-rain.done{opacity:0}
+.petal-fall{position:absolute;top:-40px;animation:petalFall linear forwards}
+.petal-spin{width:100%;height:100%;animation:petalSpin ease-in-out infinite alternate;filter:drop-shadow(0 2px 2px rgba(90,10,20,.25))}
+.petal-spin svg{display:block;width:100%;height:100%}
+@keyframes petalFall{0%{transform:translate(0,0)}25%{transform:translate(var(--sway),26vh)}50%{transform:translate(calc(var(--sway) * -.4),54vh)}75%{transform:translate(calc(var(--sway) * .7),80vh)}100%{transform:translate(0,112vh)}}
+@keyframes petalSpin{0%{transform:rotate3d(var(--rx),var(--ry),.4,0deg)}100%{transform:rotate3d(var(--rx),var(--ry),.4,320deg)}}
+
+/* ---------- event emblems ---------- */
+.ev__icon{width:96px;height:96px;margin:0 auto 12px;padding:12px;border-radius:50%;color:var(--gold);border:1px solid color-mix(in srgb,var(--line) 75%,transparent);
+  background:radial-gradient(circle,color-mix(in srgb,var(--paper) 40%,#fff) 0%,transparent 75%)}
+.ev__icon svg{display:block;width:100%;height:100%}

@@ -12,8 +12,10 @@ window.WEDDING = {
   /* ---------- Look & feel ----------
      palette: "champagne" | "select" | "royal" | "emerald" | "rose" | "ocean"
      art.venue: a watercolour of the venue (wide image, about 3:1) in the images folder
-     art.florals: true shows the sage floral corners                                   */
-  theme: { palette: "champagne" },
+     art.florals: true shows the sage floral corners and side borders
+     Each event gets a small drawn emblem chosen from its name (mandap, mehndi hand, haldi bowl, rings, dhol, cocktail, diya, dinner).
+     To choose one yourself, add icon: "mandap" | "mehndi" | "haldi" | "rings" | "dhol" | "cocktail" | "diya" | "dinner" | "marigold" to the event.                                   */
+  theme: { palette: "champagne", wax: "#8B1A1F" },   // wax: seal colour (deep red); try "#7A5A1E" for gold wax
   art: { venue: "images/venue-art.jpg", florals: true },
 
   /* true = shows the colour switcher (for The Select only). Set false before sharing with guests. */
@@ -61,14 +63,14 @@ window.WEDDING = {
       events: [
         {
           name: "Mehndi Lunch", time: "12 PM onwards", venue: "ITC Grand Bharat", dress: "", colour: "",
-          note: "Welcome drinks, mehndi for everyone, a leisurely lunch, dhol and games in the afternoon sun.",
+          note: "",
           moments: [],
           image: "", start: "2027-02-28T12:00:00+05:30", end: "2027-02-28T15:30:00+05:30"
         },
         {
           name: "Engagement & Sangeet", time: "7 PM onwards", venue: "ITC Grand Bharat", dress: "", colour: "",
-          note: "Cocktails, the couple's grand entry and ring ceremony, family performances, a live band — and an after-party that runs late.",
-          moments: [["7:00 PM", "Cocktails"], ["8:00 PM", "Couple's entry & ring ceremony"], ["8:55 PM", "Sangeet performances"], ["10:30 PM", "Dinner"]],
+          note: "",
+          moments: [],
           image: "", start: "2027-02-28T19:00:00+05:30", end: "2027-03-01T01:00:00+05:30"
         }
       ]
@@ -79,14 +81,14 @@ window.WEDDING = {
       events: [
         {
           name: "Haldi Brunch", time: "11 AM onwards", venue: "ITC Grand Bharat", dress: "", colour: "",
-          note: "Brunch, dhol and games, a shower of marigold petals — then haldi for the couple (and probably for you too).",
+          note: "",
           moments: [],
           image: "", start: "2027-03-01T11:00:00+05:30", end: "2027-03-01T14:45:00+05:30"
         },
         {
           name: "Wedding Ceremony", time: "5 PM onwards", venue: "ITC Grand Bharat", dress: "", colour: "",
-          note: "From the sehra bandi and baraat to the varmala and pheras under the stars, followed by dinner and the after-party.",
-          moments: [["5:00 PM", "Sehra Bandi"], ["6:00 PM", "Baraat"], ["7:00 PM", "Bride's entry & Varmala"], ["8:00 PM", "Pheras"], ["10:00 PM", "Dinner"], ["12:00 AM", "After-party"]],
+          note: "",
+          moments: [],
           image: "", start: "2027-03-01T17:00:00+05:30", end: "2027-03-02T01:00:00+05:30"
         }
       ]
@@ -122,7 +124,7 @@ window.WEDDING = {
   /* ---------- Optional extra contacts (WhatsApp) ---------- */
   contacts: [],
 
-  music: "",
+  music: "",      // your song: put the MP3 in the images folder, e.g. "images/song.mp3" — it starts when the guest taps the seal
 
   show: {
     welcome: true, families: true, countdown: true,

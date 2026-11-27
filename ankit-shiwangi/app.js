@@ -65,8 +65,11 @@
 
   /* ---------- opening ---------- */
   var opening = $('#opening'), audio = $('#music'), mbtn = $('#musicBtn');
+  var FX = window.SELECT_FX;
+  if (FX) $('#sealArt').innerHTML = FX.waxSeal(W.couple.monogram || '', (W.theme || {}).wax);
   $('#seal').addEventListener('click', function () {
     if (opening.classList.contains('open')) return;
+    if (FX && W.petals !== false) FX.petalShower();
     opening.classList.add('open');
     document.body.classList.remove('locked');
     if (W.music) { mbtn.hidden = false; var p = audio.play(); if (p && p.catch) p.catch(function () { mbtn.classList.add('off'); }); }
@@ -119,16 +122,12 @@
     col.appendChild(withOrdinals(el('p', 'day__date'), day.date));
     (day.events || []).forEach(function (ev) {
       var e = el('div', 'ev');
+      if (FX) { var ic = el('div', 'ev__icon'); ic.innerHTML = FX.eventIcon(ev); e.appendChild(ic); }
       e.appendChild(el('h3', '', ev.name));
       e.appendChild(el('p', 'ev__time', ev.time));
       if (ev.venue && ev.venue !== W.venue.name) e.appendChild(el('p', 'ev__dress', ev.venue));
       if (ev.dress) e.appendChild(el('p', 'ev__dress', 'Dress code · ' + ev.dress));
       if (ev.note) e.appendChild(el('p', 'ev__note', ev.note));
-      if (ev.moments && ev.moments.length) {
-        var d = el('details'), s = el('summary', '', 'View programme'), ul = el('ul', 'moments');
-        ev.moments.forEach(function (m) { var li = el('li'); li.appendChild(el('b', '', m[0])); li.appendChild(el('span', '', m[1])); ul.appendChild(li); });
-        d.appendChild(s); d.appendChild(ul); e.appendChild(d);
-      }
       var link = gcal(ev);
       if (link) { var a = el('a', 'cal', '+ Add to calendar'); a.href = link; a.target = '_blank'; a.rel = 'noopener'; e.appendChild(el('div')).appendChild(a); }
       col.appendChild(e);

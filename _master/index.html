@@ -29,15 +29,12 @@
   <div class="opening__centre">
     <p class="opening__dear" data-k="guestLine" hidden></p>
     <p class="caps">You are invited</p>
-    <button type="button" class="seal" id="seal" aria-label="Open the invitation">
-      <span class="seal__ring"></span>
-      <span class="seal__mono" data-k="couple.monogram"></span>
-    </button>
+    <button type="button" class="seal" id="seal" aria-label="Open the invitation"><span id="sealArt"></span></button>
     <p class="caps caps--soft opening__hint">Tap the seal to open</p>
   </div>
 </div>
 
-<button type="button" id="musicBtn" class="music" aria-label="Pause music" hidden><span></span><span></span><span></span></button>
+<button type="button" id="musicBtn" class="music" aria-label="Pause music" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18V5l11-2v13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="6.5" cy="18" r="2.6" fill="currentColor"/><circle cx="17.5" cy="16" r="2.6" fill="currentColor"/></svg></button>
 
 <main id="invite">
 
@@ -133,6 +130,7 @@
 
 <audio id="music" loop preload="none"></audio>
 <script src="wedding.js"></script>
+<script src="flourish.js"></script>
 <script src="app.js"></script>
 </body>
 </html>
