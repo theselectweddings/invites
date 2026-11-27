@@ -43,6 +43,8 @@ window.WEDDING = {
     revealHint: "Scratch the card to reveal",
     countdownTitle: "Countdown to our wedding",
     eventsTitle: "Wedding events",
+    wardrobeTitle: "Wardrobe planner",
+    wardrobeIntro: "A little colour guide for each celebration — dress up, have fun, and match the mood.",
     rsvpTitle: "Kindly RSVP"
   },
 
@@ -79,6 +81,21 @@ window.WEDDING = {
     }
   ],
 
+  /* ---------- Wardrobe planner ----------
+     Each card recolours the outfit illustration. Colours by name (Ivory, Champagne, Gold, Silver, Blush, Rose, Rani Pink,
+     Peach, Coral, Marigold, Turmeric, Lemon, Mint, Pistachio, Emerald, Bottle Green, Powder Blue, Royal Blue, Navy, Lilac,
+     Purple, Wine, Maroon, Red, Black) or any colour code like "#C2185B". Leave one out to keep the original.          */
+  wardrobe: [
+    { event: "Mehndi Lunch", when: "14th February", theme: "Garden greens", note: "Fresh greens with a pop of pink.",
+      colours: { lehenga: "Pistachio", gown: "Mint", sherwani: "Emerald", blazer: "Rani Pink" } },
+    { event: "Engagement & Sangeet", when: "14th February", theme: "Shimmer all the way", note: "Sequins, shine and midnight tones.",
+      colours: { lehenga: "Black", gown: "Navy", sherwani: "Black", blazer: "Emerald" } },
+    { event: "Haldi Brunch", when: "15th February", theme: "Sunshine yellows", note: "Turmeric, marigold and soft peach.",
+      colours: { lehenga: "Turmeric", gown: "Peach", sherwani: "Ivory", blazer: "Marigold" } },
+    { event: "Wedding Ceremony", when: "15th February", theme: "Royal jewel tones", note: "Rich jewel tones with gold.",
+      colours: { lehenga: "Maroon", gown: "Royal Blue", sherwani: "Emerald", blazer: "Purple" } }
+  ],
+
   /* ---------- Venue ----------
      photos: optional venue photos for the Gallery, e.g. ["images/venue-1.jpg", "images/venue-2.jpg"] */
   venue: {
@@ -104,5 +121,5 @@ window.WEDDING = {
   contacts: [],   // e.g. [{ name: "Shikha Sharma", role: "Event adviser · The Select", whatsapp: "91XXXXXXXXXX" }]
   music: "default",   // "default" = Na Tum Jano Na Hum · or your own MP3, e.g. "images/our-song.mp3" · or "none" for no music
 
-  show: { welcome: true, reveal: true, families: true, countdown: true, events: true, venue: true, gallery: true, rsvp: true, contacts: true }
+  show: { welcome: true, reveal: true, families: true, countdown: true, events: true, wardrobe: true, venue: true, gallery: true, rsvp: true, contacts: true }
 };

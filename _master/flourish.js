@@ -284,5 +284,73 @@
     return '';
   }
 
-  window.SELECT_FX = { eventArt: eventArt, garden: garden, waxSeal: waxSeal, petalShower: petalShower, eventIcon: eventIcon, icons: Object.keys(ICONS) };
+
+  /* =================== WARDROBE PLANNER: recolour the outfits =================== */
+  var WARDROBE_COLOURS = {
+    'Ivory': '#F3EBDD', 'Champagne': '#E3CBA2', 'Gold': '#C9A24B', 'Silver': '#C8C8CC',
+    'Blush': '#EDBCC0', 'Rose': '#D97A8C', 'Rani Pink': '#C2185B', 'Peach': '#F2B38F',
+    'Coral': '#E36F5A', 'Marigold': '#E99A26', 'Turmeric': '#E8B829', 'Lemon': '#F3E08A',
+    'Mint': '#A8D8BE', 'Pistachio': '#A9C27A', 'Emerald': '#1F6B4E', 'Bottle Green': '#1E4632',
+    'Powder Blue': '#A9C4DD', 'Royal Blue': '#2547A0', 'Navy': '#1F2A4E', 'Lilac': '#C3A6D6',
+    'Purple': '#5B2A7A', 'Wine': '#6E1F2E', 'Maroon': '#7A1F2B', 'Red': '#B3202F', 'Black': '#1C1C1E'
+  };
+  var OUTFITS = [
+    ['lehenga', 'Lehenga (seated)'], ['gown', 'Gown / saree'], ['sherwani', 'Sherwani'], ['blazer', 'Blazer & turban']
+  ];
+  var OUTFIT_STATS = {"lehenga": {"L": 0.471, "S": 0.415}, "gown": {"L": 0.627, "S": 0.47}, "sherwani": {"L": 0.208, "S": 0.133}, "blazer": {"L": 0.48, "S": 0.383}};
+  function hexOf(c) { return WARDROBE_COLOURS[c] || c; }
+  function rgb2hsl(r, g, b) {
+    var mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, h = 0, s = 0, d = mx - mn;
+    if (d) {
+      s = d / (1 - Math.abs(2 * l - 1));
+      if (mx === r) h = ((g - b) / d) % 6; else if (mx === g) h = (b - r) / d + 2; else h = (r - g) / d + 4;
+      h *= 60; if (h < 0) h += 360;
+    }
+    return [h, s, l];
+  }
+  function hsl2rgb(h, s, l) {
+    var c = (1 - Math.abs(2 * l - 1)) * s, x = c * (1 - Math.abs((h / 60) % 2 - 1)), m = l - c / 2, r, g, b;
+    if (h < 60) { r = c; g = x; b = 0; } else if (h < 120) { r = x; g = c; b = 0; } else if (h < 180) { r = 0; g = c; b = x; }
+    else if (h < 240) { r = 0; g = x; b = c; } else if (h < 300) { r = x; g = 0; b = c; } else { r = c; g = 0; b = x; }
+    return [r + m, g + m, b + m];
+  }
+  var wardCache = null;
+  function loadImg(src) { return new Promise(function (ok, no) { var i = new Image(); i.onload = function () { ok(i); }; i.onerror = no; i.src = src; }); }
+  function wardrobeData(dir) {
+    if (wardCache) return wardCache;
+    wardCache = Promise.all([loadImg(dir + 'wardrobe-base.jpg')].concat(OUTFITS.map(function (o) { return loadImg(dir + 'wardrobe-mask-' + o[0] + '.png'); })))
+      .then(function (imgs) {
+        var w = imgs[0].naturalWidth, h = imgs[0].naturalHeight, cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+        var cx = cv.getContext('2d', { willReadFrequently: true });
+        cx.drawImage(imgs[0], 0, 0); var base = cx.getImageData(0, 0, w, h);
+        var masks = imgs.slice(1).map(function (m) { cx.clearRect(0, 0, w, h); cx.drawImage(m, 0, 0, w, h); return cx.getImageData(0, 0, w, h).data; });
+        return { w: w, h: h, base: base, masks: masks };
+      });
+    return wardCache;
+  }
+  // colours: { lehenga: 'Maroon' | '#hex', gown: ..., sherwani: ..., blazer: ... }  -> Promise(ImageData)
+  function dressUp(dir, colours) {
+    return wardrobeData(dir).then(function (D) {
+      var out = new ImageData(new Uint8ClampedArray(D.base.data), D.w, D.h), px = out.data, src = D.base.data;
+      OUTFITS.forEach(function (o, k) {
+        var col = colours && colours[o[0]]; if (!col) return;
+        var hx = hexOf(col), n = parseInt(hx.slice(1), 16);
+        var t = rgb2hsl((n >> 16) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255), st = OUTFIT_STATS[o[0]], m = D.masks[k];
+        for (var i = 0; i < px.length; i += 4) {
+          var wgt = m[i] / 255; if (wgt < .02) continue;
+          var o3 = rgb2hsl(src[i] / 255, src[i + 1] / 255, src[i + 2] / 255);
+          var L = o3[2] <= 0 ? 0 : (t[2] <= st.L ? o3[2] * (t[2] / st.L) : o3[2] + (1 - o3[2]) * ((t[2] - st.L) / (1 - st.L)));
+          var S = Math.min(1, t[1] * Math.max(.45, Math.min(1.5, o3[1] / st.S)));
+          var c = hsl2rgb(t[0], S, Math.max(0, Math.min(1, L)));
+          px[i] = px[i] * (1 - wgt) + c[0] * 255 * wgt; px[i + 1] = px[i + 1] * (1 - wgt) + c[1] * 255 * wgt; px[i + 2] = px[i + 2] * (1 - wgt) + c[2] * 255 * wgt;
+        }
+      });
+      for (var j = 0; j < px.length; j += 4) { // let the white paper of the illustration fade into the page
+        var mn = Math.min(px[j], px[j + 1], px[j + 2]); px[j + 3] = Math.max(0, Math.min(255, (251 - mn) * 255 / 22));
+      }
+      return out;
+    });
+  }
+
+  window.SELECT_FX = { dressUp: dressUp, WARDROBE_COLOURS: WARDROBE_COLOURS, OUTFITS: OUTFITS, hexOf: hexOf, eventArt: eventArt, garden: garden, waxSeal: waxSeal, petalShower: petalShower, eventIcon: eventIcon, icons: Object.keys(ICONS) };
 })();

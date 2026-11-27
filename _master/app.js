@@ -254,6 +254,58 @@
     $('#dayCols').appendChild(col);
   });
 
+
+  /* ---------- wardrobe planner ---------- */
+  (function () {
+    var list = W.wardrobe || [];
+    if (!list.length || show.wardrobe === false || !FX || !FX.dressUp) { $('#wardrobe').hidden = true; return; }
+    var dir = (art.wardrobePath || 'images/');
+    list.forEach(function (wd, idx) {
+      var card = el('div', 'wcard');
+      card.appendChild(el('p', 'wcard__event', [wd.event, wd.when].filter(Boolean).join(' · ')));
+      if (wd.theme) card.appendChild(el('h3', 'wcard__theme', wd.theme));
+      var fig = el('div', 'wcard__img'), img = el('canvas'); img.setAttribute('role', 'img'); img.setAttribute('aria-label', 'Outfit inspiration for ' + (wd.event || 'the event')); fig.appendChild(img); card.appendChild(fig);
+      var sw = el('ul', 'wcard__sw'); card.appendChild(sw);
+      if (wd.note) card.appendChild(el('p', 'wcard__note', wd.note));
+      var cols = Object.assign({}, wd.colours || {});
+      function swatches() {
+        sw.innerHTML = ''; var seen = {};
+        FX.OUTFITS.forEach(function (o) {
+          var c = cols[o[0]]; if (!c || seen[c]) return; seen[c] = 1;
+          var li = el('li'), dot = el('i'); dot.style.background = FX.hexOf(c); li.appendChild(dot); li.appendChild(document.createTextNode(c.charAt(0) === '#' ? c.toUpperCase() : c)); sw.appendChild(li);
+        });
+      }
+      var tm;
+      function render() { clearTimeout(tm); fig.classList.add('busy'); tm = setTimeout(function () { FX.dressUp(dir, cols).then(function (d) { img.width = d.width; img.height = d.height; img.getContext('2d').putImageData(d, 0, 0); fig.classList.remove('busy'); }).catch(function () { fig.classList.remove('busy'); }); }, 60); swatches(); }
+      if (W.preview) {
+        var ed = el('div', 'wcard__edit');
+        ed.appendChild(el('p', 'wcard__edit-h', 'Choose colours (preview only)'));
+        FX.OUTFITS.forEach(function (o) {
+          var row = el('label', 'wrow'); row.appendChild(el('span', '', o[1]));
+          var sel = el('select'); var none = el('option', '', 'Original'); none.value = ''; sel.appendChild(none);
+          Object.keys(FX.WARDROBE_COLOURS).forEach(function (n) { var op = el('option', '', n); op.value = n; sel.appendChild(op); });
+          var custom = el('option', '', 'Custom colour'); custom.value = '#custom'; sel.appendChild(custom);
+          var pick = el('input'); pick.type = 'color'; pick.value = '#C2185B';
+          var cur = cols[o[0]] || '';
+          if (cur.charAt(0) === '#') { sel.value = '#custom'; pick.value = cur; } else sel.value = cur;
+          pick.hidden = sel.value !== '#custom';
+          sel.addEventListener('change', function () { pick.hidden = sel.value !== '#custom'; cols[o[0]] = sel.value === '#custom' ? pick.value : sel.value; if (!cols[o[0]]) delete cols[o[0]]; render(); });
+          pick.addEventListener('input', function () { cols[o[0]] = pick.value; render(); });
+          row.appendChild(sel); row.appendChild(pick); ed.appendChild(row);
+        });
+        var copy = el('button', 'wcopy', 'Copy these choices'); copy.type = 'button';
+        copy.addEventListener('click', function () {
+          var txt = (wd.event || 'Event') + ': ' + FX.OUTFITS.map(function (o) { return o[1] + ' – ' + (cols[o[0]] || 'original'); }).join(', ');
+          var done = function () { copy.textContent = 'Copied — paste it to Claude'; setTimeout(function () { copy.textContent = 'Copy these choices'; }, 2500); };
+          try { navigator.clipboard.writeText(txt).then(done, function () { copy.textContent = txt; }); } catch (e) { copy.textContent = txt; }
+        });
+        ed.appendChild(copy); card.appendChild(ed);
+      }
+      $('#wardList').appendChild(card);
+      render();
+    });
+  })();
+
   /* ---------- venue ---------- */
   var V = W.venue || {};
   (V.notes || []).forEach(function (n) { $('#venueNotes').appendChild(el('li', '', n)); });
@@ -296,7 +348,7 @@
   if (!(W.contacts || []).length) $('#contacts').hidden = true;
 
   /* ---------- top navigation (only sections that are shown) ---------- */
-  [['top', 'Our wedding'], ['events', 'Events'], ['venue', 'Venue'], ['gallery', 'Gallery'], ['rsvp', 'RSVP']].forEach(function (n) {
+  [['top', 'Our wedding'], ['events', 'Events'], ['wardrobe', 'Wardrobe'], ['venue', 'Venue'], ['gallery', 'Gallery'], ['rsvp', 'RSVP']].forEach(function (n) {
     var s = document.getElementById(n[0]); if (!s || s.hidden) return;
     var a = el('a', '', n[1]); a.href = '#' + n[0]; $('#nav').appendChild(a);
   });

@@ -286,3 +286,23 @@ main>.hero,main>.foot{z-index:auto}
 .studio__panel{max-height:min(78vh,640px);overflow-y:auto}
 .studio__row:not(.studio__row--chips){grid-template-columns:1fr 1fr}
 .studio__row button{font-size:13px}
+
+/* ---------- wardrobe planner ---------- */
+.ward__intro{margin-bottom:30px}
+.ward{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:44px 36px;max-width:900px;margin:0 auto}
+.wcard{text-align:center}
+.wcard__event{font:500 13px/1.4 var(--serif);letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
+.wcard__theme{font:400 clamp(30px,4.4vw,40px)/1.15 var(--script);color:var(--gold);margin:0 0 10px}
+.wcard__img{position:relative;max-width:400px;margin:0 auto;aspect-ratio:736/876}
+.wcard__img canvas{display:block;width:100%;height:100%;transition:opacity .35s}
+.wcard__img.busy canvas{opacity:.55}
+.wcard__sw{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin:12px 0 0;padding:0}
+.wcard__sw li{display:inline-flex;align-items:center;gap:7px;font:500 13px/1.4 var(--serif);letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
+.wcard__sw i{width:16px;height:16px;border-radius:50%;border:1px solid rgba(0,0,0,.12);box-shadow:inset 0 -2px 3px rgba(0,0,0,.12)}
+.wcard__note{font:italic 400 17px/1.5 var(--serif);color:var(--muted);margin:10px auto 0;max-width:340px}
+.wcard__edit{margin:16px auto 0;max-width:340px;padding:14px;border:1px dashed var(--line);border-radius:12px;text-align:left;font-family:system-ui,sans-serif;background:color-mix(in srgb,var(--paper) 70%,#fff)}
+.wcard__edit-h{margin:0 0 8px;font:600 11px/1 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#888}
+.wrow{display:grid;grid-template-columns:110px 1fr auto;align-items:center;gap:8px;margin:0 0 6px;font:400 13px system-ui,sans-serif;color:#333}
+.wrow select{min-height:34px;border:1px solid #ddd;border-radius:8px;background:#fff;font:400 14px system-ui,sans-serif;padding:0 6px}
+.wrow input[type=color]{width:36px;height:34px;padding:0;border:1px solid #ddd;border-radius:8px;background:#fff}
+.wcopy{margin-top:6px;width:100%;min-height:36px;border:1px solid #222;border-radius:8px;background:#fff;font:500 13px system-ui,sans-serif;cursor:pointer;word-break:break-word}
