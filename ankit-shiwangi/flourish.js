@@ -352,5 +352,22 @@
     });
   }
 
-  window.SELECT_FX = { dressUp: dressUp, WARDROBE_COLOURS: WARDROBE_COLOURS, OUTFITS: OUTFITS, hexOf: hexOf, eventArt: eventArt, garden: garden, waxSeal: waxSeal, petalShower: petalShower, eventIcon: eventIcon, icons: Object.keys(ICONS) };
+  /* repeating lotus print for the gatefold doors (one tile; side 'l' or 'r') */
+  function lotusTile() {
+    var g = 'lt' + (++GID);
+    var defs = garden('l', 500).match(/<defs>[\s\S]*?<\/defs>/)[0].replace(/lg\d+/g, g);
+    function stem(d, w) { return '<path d="' + d + '" stroke="url(#' + g + 'stem)" stroke-width="' + (w || 2.4) + '" fill="none" stroke-linecap="round"/>'; }
+    function at(x, y, r, s, inner) { return '<g transform="translate(' + x + ' ' + y + ') rotate(' + r + ') scale(' + s + ')">' + inner + '</g>'; }
+    var body =
+      stem('M40 330C44 270 62 230 70 172') + stem('M8 330C10 290 16 262 30 236', 2) + stem('M150 330C146 300 140 280 128 262', 2) +
+      at(30, 236, -14, 1, pad(g, 40, 14, true, false)) +
+      at(128, 262, 10, 1, pad(g, 34, 12, false, true)) +
+      at(70, 172, -4, .62, flower(g, 1, 1)) +
+      stem('M120 330C118 280 112 240 104 70', 2) + at(104, 70, 4, .5, flower(g, 1, .45)) +
+      stem('M60 120C58 100 52 60 44 20', 1.8) + at(44, 20, -8, .45, flower(g, 1, 0)) +
+      at(150, 150, 18, .9, pad(g, 30, 11, true, false));
+    return '<svg xmlns="' + NS + '" viewBox="0 0 170 330" width="170" height="330">' + defs + '<g class="lg">' + body + '</g></svg>';
+  }
+
+  window.SELECT_FX = { lotusTile: lotusTile, dressUp: dressUp, WARDROBE_COLOURS: WARDROBE_COLOURS, OUTFITS: OUTFITS, hexOf: hexOf, eventArt: eventArt, garden: garden, waxSeal: waxSeal, petalShower: petalShower, eventIcon: eventIcon, icons: Object.keys(ICONS) };
 })();

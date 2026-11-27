@@ -114,18 +114,37 @@
 
   /* ---------- opening ---------- */
   var opening = $('#opening'), audio = $('#music'), mbtn = $('#musicBtn');
+  /* handmade paper texture for the gatefold, drawn once */
+  (function () {
+    var cv = document.createElement('canvas'); cv.width = cv.height = 512; var x = cv.getContext('2d');
+    x.fillStyle = '#F2E9DC'; x.fillRect(0, 0, 512, 512);
+    var img = x.getImageData(0, 0, 512, 512), d = img.data;
+    for (var i = 0; i < d.length; i += 4) { var n = (Math.random() - .5) * 14; d[i] += n; d[i + 1] += n; d[i + 2] += n * .9; }
+    x.putImageData(img, 0, 0);
+    for (var k = 0; k < 420; k++) {
+      var px = Math.random() * 512, py = Math.random() * 512, len = 4 + Math.random() * 16, ang = Math.random() * Math.PI * 2;
+      x.strokeStyle = Math.random() < .55 ? 'rgba(150,120,85,' + (.15 + Math.random() * .25) + ')' : 'rgba(255,255,250,' + (.4 + Math.random() * .4) + ')';
+      x.lineWidth = .5 + Math.random() * .7; x.beginPath(); x.moveTo(px, py);
+      x.quadraticCurveTo(px + Math.cos(ang + 1) * len * .5, py + Math.sin(ang + 1) * len * .5, px + Math.cos(ang) * len, py + Math.sin(ang) * len); x.stroke();
+    }
+    for (var s = 0; s < 260; s++) { x.fillStyle = 'rgba(120,95,65,' + (.18 + Math.random() * .3) + ')'; x.beginPath(); x.arc(Math.random() * 512, Math.random() * 512, .4 + Math.random() * 1.1, 0, 7); x.fill(); }
+    var r = document.documentElement.style;
+    r.setProperty('--paper-tex', 'url(' + cv.toDataURL('image/png') + ')');
+    r.setProperty('--door-l', 'url("' + ((W.art && W.art.doorPrint) || 'images/door-lotus-') + 'l.png")');
+    r.setProperty('--door-r', 'url("' + ((W.art && W.art.doorPrint) || 'images/door-lotus-') + 'r.png")');
+  })();
   var FX = window.SELECT_FX;
   var sealImg = (W.theme || {}).sealImage;
   if (sealImg) { var si = el('img', 'seal__img'); si.src = sealImg; si.alt = ''; $('#sealArt').appendChild(si); }
   else if (FX) $('#sealArt').innerHTML = FX.waxSeal(W.couple.monogram || '', (W.theme || {}).wax);
   $('#seal').addEventListener('click', function () {
     if (opening.classList.contains('open')) return;
-    if (FX && W.petals !== false) FX.petalShower();
-    var gdn = document.querySelector('.garden'); if (gdn) setTimeout(function () { gdn.classList.add('grow'); }, 500);
+    if (FX && W.petals !== false) setTimeout(function () { FX.petalShower(); }, reduce ? 0 : 1100);
+    var gdn = document.querySelector('.garden'); if (gdn) setTimeout(function () { gdn.classList.add('grow'); }, reduce ? 0 : 1600);
     opening.classList.add('open');
     document.body.classList.remove('locked');
     if (W.music) { mbtn.hidden = false; var p = audio.play(); if (p && p.catch) p.catch(function () { mbtn.classList.add('off'); }); }
-    setTimeout(function () { opening.classList.add('gone'); }, reduce ? 0 : 1600);
+    setTimeout(function () { opening.classList.add('gone'); }, reduce ? 0 : 2900);
   });
   var song = (W.music === undefined || W.music === '' || W.music === 'default') ? 'images/music.mp3' : (W.music === 'none' ? '' : W.music);
   W.music = song;
