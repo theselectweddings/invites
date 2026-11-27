@@ -7,6 +7,7 @@
 
   /* =================== PALETTES =================== */
   var PALETTES = {
+    lotus:     { label: 'Lotus Pink & Ivory', paper: '#FEF6F3', paper2: '#F9E3E4', gold: '#C2456A', line: '#E8B4C0', sage: '#8FAE5A', ink: '#2B2324', muted: '#7D6668', btnInk: '#FFF5F6' },
     champagne: { label: 'Champagne & Sage', paper: '#F8EBD8', paper2: '#F2E2C9', gold: '#A7843E', line: '#C9AE78', sage: '#7C8455', ink: '#5A4A30', muted: '#8A7A5E', btnInk: '#FFF8EC' },
     select:    { label: 'Sage & Copper (The Select)', paper: '#FBF1EA', paper2: '#F1DBD0', gold: '#B0692D', line: '#D7A57A', sage: '#8A9468', ink: '#4F4535', muted: '#84776A', btnInk: '#FFF6EF' },
     royal:     { label: 'Royal Maroon & Gold', paper: '#FBF1E6', paper2: '#F1DCCB', gold: '#7E2230', line: '#C6A263', sage: '#9C7A3C', ink: '#4A2A2A', muted: '#86685F', btnInk: '#FCEFD9' },
@@ -31,7 +32,7 @@
     return node;
   }
 
-  var pal = PALETTES[(W.theme || {}).palette] ? W.theme.palette : 'champagne';
+  var pal = PALETTES[(W.theme || {}).palette] ? W.theme.palette : 'lotus';
   function applyPalette() {
     var p = PALETTES[pal], r = document.documentElement.style;
     ['paper', 'paper2', 'gold', 'line', 'sage', 'ink', 'muted'].forEach(function (k) { r.setProperty('--' + k, p[k]); });
@@ -41,13 +42,14 @@
 
   /* ---------- artwork ---------- */
   var art = W.art || {};
+  var decorPath = art.floralPath || (art.decor === 'sage' ? 'images/floral-' : 'images/lotus-');
   if (art.venue) { $('#artImg').src = art.venue; $('#artImg').alt = 'Watercolour of ' + (W.venue && W.venue.name || 'the venue'); }
   else $('#art').hidden = true;
   $$('[data-floral]').forEach(function (img) {
     if (art.florals === false) { img.remove(); return; }
-    img.src = (art.floralPath || 'images/floral-') + img.getAttribute('data-floral') + '.png';
+    img.src = decorPath + img.getAttribute('data-floral') + '.png';
   });
-  if (art.florals !== false && art.sides !== false) document.documentElement.style.setProperty('--side-floral', 'url("' + (art.floralPath || 'images/floral-') + 'side.png")');
+  if (art.florals !== false && art.sides !== false) document.documentElement.style.setProperty('--side-floral', 'url("' + decorPath + 'side.png")');
 
   /* ---------- guest name from link: ?to=Sharma%20Family ---------- */
   var guest = '';
@@ -75,7 +77,9 @@
     if (W.music) { mbtn.hidden = false; var p = audio.play(); if (p && p.catch) p.catch(function () { mbtn.classList.add('off'); }); }
     setTimeout(function () { opening.classList.add('gone'); }, reduce ? 0 : 1600);
   });
-  if (W.music) audio.src = W.music;
+  var song = (W.music === undefined || W.music === '' || W.music === 'default') ? 'images/music.mp3' : (W.music === 'none' ? '' : W.music);
+  W.music = song;
+  if (song) audio.src = song;
   mbtn.addEventListener('click', function () {
     if (audio.paused) { audio.play().catch(function () {}); mbtn.classList.remove('off'); mbtn.setAttribute('aria-label', 'Pause music'); }
     else { audio.pause(); mbtn.classList.add('off'); mbtn.setAttribute('aria-label', 'Play music'); }

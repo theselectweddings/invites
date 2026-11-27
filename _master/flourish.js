@@ -79,7 +79,7 @@
     if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var host = document.createElement('div'); host.className = 'petal-rain';
     document.body.appendChild(host);
-    var count = opts.count || (window.innerWidth < 600 ? 55 : 95);
+    var count = opts.count || (window.innerWidth < 600 ? 28 : 48);
     for (var i = 0; i < count; i++) {
       var c = REDS[i % REDS.length], fall = document.createElement('div'), spin = document.createElement('div');
       var size = 14 + Math.random() * 18;
@@ -100,39 +100,60 @@
     setTimeout(function () { host.remove(); }, 9000);
   }
 
-  /* =================== EVENT EMBLEMS (fine-line drawings) =================== */
+  /* =================== EVENT EMBLEMS (fine ink line drawings) =================== */
+  function marigold(cx, cy, r) { // ruffled flower head
+    var d = '', n = 14;
+    for (var i = 0; i < n; i++) {
+      var a1 = i / n * Math.PI * 2, a2 = (i + 1) / n * Math.PI * 2, am = (a1 + a2) / 2;
+      var x1 = cx + Math.cos(a1) * r * .72, y1 = cy + Math.sin(a1) * r * .72, x2 = cx + Math.cos(a2) * r * .72, y2 = cy + Math.sin(a2) * r * .72;
+      var xm = cx + Math.cos(am) * r * 1.12, ym = cy + Math.sin(am) * r * 1.12;
+      d += (i ? 'L' : 'M') + x1.toFixed(1) + ' ' + y1.toFixed(1) + 'Q' + xm.toFixed(1) + ' ' + ym.toFixed(1) + ' ' + x2.toFixed(1) + ' ' + y2.toFixed(1);
+    }
+    var inner = '';
+    for (var k = 0; k < 7; k++) { var a = k / 7 * Math.PI * 2; inner += 'M' + (cx + Math.cos(a) * r * .25).toFixed(1) + ' ' + (cy + Math.sin(a) * r * .25).toFixed(1) + 'L' + (cx + Math.cos(a) * r * .55).toFixed(1) + ' ' + (cy + Math.sin(a) * r * .55).toFixed(1); }
+    return '<path d="' + d + 'Z"/><path d="' + inner + '" stroke-width=".7"/><circle cx="' + cx + '" cy="' + cy + '" r="' + (r * .22).toFixed(1) + '"/>';
+  }
   var ICONS = {
-    mandap: '<path d="M8 57h48M11 53h42"/><path d="M15 53V29M49 53V29M21 53V31M43 53V31"/>' +
-      '<path d="M12 29h40"/><path d="M14 29c0-10 9-16 18-19 9 3 18 9 18 19"/><path d="M20 29c0-7 5-11 12-14 7 3 12 7 12 14"/>' +
-      '<path d="M32 10V5"/><circle cx="32" cy="3.6" r="1.4"/><path d="M12 29q2.5 4 5 0q2.5 4 5 0q2.5 4 5 0q2.5 4 5 0q2.5 4 5 0q2.5 4 5 0q2.5 4 5 0q2.5 4 5 0"/>' +
-      '<path d="M15 36q17 9 34 0"/><circle cx="21" cy="38.6" r=".9"/><circle cx="27" cy="40.2" r=".9"/><circle cx="32" cy="40.6" r=".9"/><circle cx="37" cy="40.2" r=".9"/><circle cx="43" cy="38.6" r=".9"/>' +
-      '<path d="M27 53v-3h10v3"/><path d="M32 49.5c-2.6-2-2.4-5 0-7.4 2.4 2.4 2.6 5.4 0 7.4z"/>',
-    mehndi: '<path d="M25 59V44L17.5 33.5c-1.6-2.4 1.4-5 3.6-3L27 37V14c0-2.7 4-2.7 4 0v17V11c0-2.7 4-2.7 4 0v20V13c0-2.7 4-2.7 4 0v19V18c0-2.7 4-2.7 4 0v24c0 8-3 12-5 17"/>' +
-      '<circle cx="34.5" cy="45" r="5"/><circle cx="34.5" cy="45" r="1.8"/>' +
-      '<path d="M29.5 45h-2M41.5 45h-2M34.5 40v-2M34.5 52v-2M31 41.5l-1.4-1.4M39.4 49.9 38 48.5M38 41.5l1.4-1.4M29.6 49.9l1.4-1.4"/>' +
-      '<circle cx="29" cy="16" r=".9"/><circle cx="33" cy="13" r=".9"/><circle cx="37" cy="15" r=".9"/><circle cx="41" cy="20" r=".9"/>' +
-      '<path d="M28 22h2M28 26h2M32 20h2M32 24h2M36 21h2M36 25h2M40 25h2M40 29h2"/><path d="M25 55h13"/>',
-    haldi: '<path d="M10 36h44"/><path d="M12 36c0 11 9 18 20 18s20-7 20-18"/><path d="M24 54l-2 4h20l-2-4"/>' +
-      '<path d="M18 43q14 6 28 0"/><circle cx="23" cy="47" r=".9"/><circle cx="32" cy="49" r=".9"/><circle cx="41" cy="47" r=".9"/>' +
-      '<path d="M17 36c3-3 8-4 15-4s12 1 15 4"/>' +
-      '<g><circle cx="24" cy="22" r="3"/><path d="M24 14.5a2.4 2.4 0 0 1 2.6 2.6 2.4 2.4 0 0 1 3.4 1.4 2.4 2.4 0 0 1 .4 3.5 2.4 2.4 0 0 1-.4 3.5 2.4 2.4 0 0 1-3.4 1.4A2.4 2.4 0 0 1 24 29.5a2.4 2.4 0 0 1-2.6-2.6 2.4 2.4 0 0 1-3.4-1.4 2.4 2.4 0 0 1-.4-3.5 2.4 2.4 0 0 1 .4-3.5 2.4 2.4 0 0 1 3.4-1.4A2.4 2.4 0 0 1 24 14.5z"/></g>' +
-      '<g><circle cx="40" cy="18" r="2.4"/><path d="M40 12a2 2 0 0 1 2.1 2.1 2 2 0 0 1 2.8 1.2 2 2 0 0 1 .3 2.7 2 2 0 0 1-.3 2.7 2 2 0 0 1-2.8 1.2A2 2 0 0 1 40 24a2 2 0 0 1-2.1-2.1 2 2 0 0 1-2.8-1.2 2 2 0 0 1-.3-2.7 2 2 0 0 1 .3-2.7 2 2 0 0 1 2.8-1.2A2 2 0 0 1 40 12z"/></g>' +
-      '<path d="M30 30c2-4 6-6 10-5-2 4-6 6-10 5z"/>',
-    rings: '<circle cx="25" cy="40" r="12"/><circle cx="25" cy="40" r="9.5"/><circle cx="39" cy="40" r="12"/><circle cx="39" cy="40" r="9.5"/>' +
-      '<path d="M33.5 27.5l2.5-4h6l2.5 4-5.5 6z"/><path d="M33.5 27.5h11M38 23.5l1 4 1-4M39 27.5v6"/>' +
-      '<path d="M50 16v5M47.5 18.5h5M14 20v4M12 22h4"/>',
-    dhol: '<ellipse cx="17" cy="37" rx="5" ry="12"/><path d="M17 25h30M17 49h30"/><path d="M47 25a5 12 0 0 1 0 24"/>' +
-      '<path d="M20 26l5 22 5-22 5 22 5-22 5 22"/><path d="M17 25C22 12 42 12 47 25"/>' +
-      '<path d="M8 20l6 6M56 20l-6 6"/><circle cx="7" cy="19" r="1.4"/><circle cx="57" cy="19" r="1.4"/>' +
-      '<path d="M53 8v8.5"/><circle cx="51" cy="17" r="2"/><path d="M53 8l4 1.5"/>',
-    cocktail: '<path d="M14 18h16l-8 14z"/><path d="M22 32v14M17 46h10"/><path d="M34 22h16l-8 14z"/><path d="M42 36v12M37 48h10"/>' +
-      '<path d="M28 14l2.5-4M32 13l4-3M24.5 12l-1-4"/><circle cx="18" cy="21" r=".9"/><circle cx="46" cy="25" r=".9"/>',
-    diya: '<path d="M12 40c4 8 12 12 20 12s16-4 20-12z"/><path d="M12 40h40"/><path d="M48 40c3-1 6-3 7-6"/>' +
-      '<path d="M32 38c-4-3-4-9 0-14 4 5 4 11 0 14z"/><path d="M32 35c-1.5-1.4-1.5-3.6 0-5.4 1.5 1.8 1.5 4 0 5.4z"/>' +
-      '<path d="M24 56h16"/><path d="M20 20l2 2M44 20l-2 2M32 14v3"/>',
-    dinner: '<circle cx="32" cy="36" r="15"/><circle cx="32" cy="36" r="10"/><path d="M10 24v8a3 3 0 0 0 6 0v-8M13 24v28"/><path d="M54 24c-3 0-5 4-5 10h5v18"/>',
-    marigold: '<circle cx="32" cy="30" r="5"/><path d="M32 16a4 4 0 0 1 4.2 4.2 4 4 0 0 1 5.6 2.4 4 4 0 0 1 .6 5.6 4 4 0 0 1-.6 5.6 4 4 0 0 1-5.6 2.4A4 4 0 0 1 32 40.4a4 4 0 0 1-4.2-4.2 4 4 0 0 1-5.6-2.4 4 4 0 0 1-.6-5.6 4 4 0 0 1 .6-5.6 4 4 0 0 1 5.6-2.4A4 4 0 0 1 32 16z"/>' +
-      '<path d="M32 41v16M32 50c-4-1-7-4-8-8 4 0 7 3 8 8zM32 47c4-1 7-4 8-8-4 0-7 3-8 8z"/>'
+    mandap: '<path d="M8 93h84M13 89h74M18 85h64"/>' +
+      '<path d="M23 85V45M77 85V45"/><path d="M32 85V49M68 85V49" stroke-opacity=".55"/><path d="M20 85h6M74 85h6M20 45h6M74 45h6"/>' +
+      '<path d="M23 50c1 1 1 3 0 4M77 50c-1 1-1 3 0 4M23 76c1 1 1 3 0 4M77 76c-1 1-1 3 0 4" stroke-width=".7"/>' +
+      '<path d="M15 45h70M17 41h66"/><path d="M24 41C24 27 36 18 50 14 64 18 76 27 76 41"/><path d="M33 41C34 31 41 25 50 22 59 25 66 31 67 41" stroke-width=".8"/>' +
+      '<path d="M50 14V8M47 8h6"/><circle cx="50" cy="5.4" r="1.6"/><path d="M14 41c0-5 3-8 6-9 3 1 6 4 6 9M74 41c0-5 3-8 6-9 3 1 6 4 6 9"/><path d="M20 32v-3M80 32v-3"/>' +
+      '<path d="M23 48q13.5 9 27 0q13.5 9 27 0"/>' +
+      '<path d="M29 50.5v9M36.5 52.4v12M43.5 51v8M56.5 51v8M63.5 52.4v12M71 50.5v9" stroke-width=".7"/>' +
+      '<circle cx="29" cy="60.6" r="1"/><circle cx="36.5" cy="65.6" r="1.2"/><circle cx="43.5" cy="60" r="1"/><circle cx="56.5" cy="60" r="1"/><circle cx="63.5" cy="65.6" r="1.2"/><circle cx="71" cy="60.6" r="1"/>' +
+      '<path d="M41 85v-5h18v5M43 80l2-3h10l2 3"/><path d="M50 76.5c-3.2-2.4-3.6-6.2-.6-9.6.4 2 1.8 3 2.9 1.7 1.5 3.6.8 6.3-2.3 7.9z"/>',
+    mehndi: '<g transform="translate(9 0) scale(1.2 1)">' +
+      '<path d="M38 97c-.8-8-2.2-14-6-20-3.8-6-12-12.8-15-17.6-1.9-3.1 1.2-6.2 4.2-4.2L32 64.5V31c0-3.2 4.6-3.2 4.6 0v23V23c0-3.4 4.8-3.4 4.8 0v31V26c0-3.3 4.7-3.3 4.7 0v29V34c0-3.1 4.5-3.1 4.5 0v32c0 10-3.8 18-5.8 31"/>' +
+      '<circle cx="42" cy="73" r="6.5" stroke-width=".8"/><circle cx="42" cy="73" r="2.6" stroke-width=".8"/>' +
+      '<path d="M42 64.5v2M42 79.5v2M33.5 73h2M48.5 73h2M36 67l1.4 1.4M46.6 77.6 48 79M48 67l-1.4 1.4M37.4 77.6 36 79" stroke-width=".8"/>' +
+      '<path d="M32.5 44h3.6M32.5 47h3.6M37.2 38h3.8M37.2 41h3.8M42 40h3.8M42 43h3.8M46.8 47h3.4M46.8 50h3.4" stroke-width=".7"/>' +
+      '<circle cx="34.3" cy="34.5" r=".8"/><circle cx="39.1" cy="27" r=".8"/><circle cx="43.9" cy="30" r=".8"/><circle cx="48.6" cy="37.5" r=".8"/>' +
+      '<path d="M24 62c2-1 4 0 4 2s-3 2.5-4 1" stroke-width=".7"/><path d="M36 87q6 2 11 0M36.6 91q6 2 10.6 0" stroke-width=".8"/></g>',
+    haldi: marigold(35, 38, 10) + marigold(58, 33, 8) + marigold(73, 44, 6) +
+      '<path d="M44 45c3-6 9-9 15-8-3 6-9 9-15 8zM44 45c4-1 9-4 15-8" stroke-width=".8"/>' +
+      '<path d="M12 60h76"/><path d="M15 60c3 14 16 22 35 22s32-8 35-22"/><path d="M38 82l-3 7h30l-3-7"/><path d="M33 89h34"/>' +
+      '<path d="M21 60c7-5 17-7 29-7s22 2 29 7"/><path d="M34 57c4-2 9-2 13 0M53 56c4-1.5 8-1 11 1" stroke-width=".7"/>' +
+      '<path d="M22 67q28 10 56 0" stroke-width=".8"/><circle cx="30" cy="71" r=".9"/><circle cx="40" cy="73" r=".9"/><circle cx="50" cy="73.6" r=".9"/><circle cx="60" cy="73" r=".9"/><circle cx="70" cy="71" r=".9"/>',
+    rings: '<circle cx="40" cy="60" r="18"/><circle cx="40" cy="60" r="15"/><circle cx="60" cy="64" r="16"/><circle cx="60" cy="64" r="13.2"/>' +
+      '<path d="M53 44.5l3-5.5h8l3 5.5-7 8.5z"/><path d="M53 44.5h14M57 39l3 5.5 3-5.5M60 44.5V53" stroke-width=".7"/><path d="M57 48.6l-1 2.6M63 48.6l1 2.6" stroke-width=".7"/>' +
+      '<path d="M76 26v8M72 30h8M24 30v5M21.5 32.5h5M84 50v4M82 52h4" stroke-width=".8"/>',
+    dhol: '<ellipse cx="26" cy="56" rx="7" ry="17"/><ellipse cx="26" cy="56" rx="4.5" ry="13" stroke-width=".7"/><path d="M26 39h48M26 73h48"/><path d="M74 39a7 17 0 0 1 0 34"/>' +
+      '<path d="M30 40l6 32 6-32 6 32 6-32 6 32 6-32 6 32" stroke-width=".8"/><path d="M26 39C33 22 67 22 74 39" stroke-width=".9"/>' +
+      '<path d="M12 28l11 9M88 28l-11 9"/><path d="M10 26.5c-1.5-1.5 0-4 2-2.5M90 26.5c1.5-1.5 0-4-2-2.5"/>' +
+      '<path d="M84 10v13"/><ellipse cx="81" cy="23.4" rx="3" ry="2.2"/><path d="M84 10l6 2.5"/><path d="M14 12v10"/><ellipse cx="11.5" cy="22.3" rx="2.6" ry="1.9"/>',
+    cocktail: '<g transform="translate(23 30) rotate(14)"><path d="M0 0h24c0 10-5.5 15-12 15S0 10 0 0z"/><path d="M2.5 4.5h19" stroke-width=".7"/><path d="M12 15v20M5 35h14"/></g>' +
+      '<g transform="translate(54 35.8) rotate(-14)"><path d="M0 0h24c0 10-5.5 15-12 15S0 10 0 0z"/><path d="M2.5 4.5h19" stroke-width=".7"/><path d="M12 15v20M5 35h14"/></g>' +
+      '<path d="M50 22v-8M43 18l-4-5M57 18l4-5" stroke-width=".8"/><circle cx="50" cy="10.5" r="1"/>',
+    diya: '<path d="M16 62c5 12 18 18 34 18s29-6 34-18z"/><path d="M14 62h72"/><path d="M80 62c5-1 8-4 10-8"/><path d="M28 70q22 8 44 0" stroke-width=".7"/>' +
+      '<path d="M50 59c-6-4.5-6.5-12-.6-19.5 5.8 7.5 5.4 15 .6 19.5z"/><path d="M50 55c-2.4-2-2.6-5-.2-8.4 2.4 3.4 2.2 6.4.2 8.4z" stroke-width=".7"/>' +
+      '<path d="M36 88h28M40 80l-2 8M60 80l2 8"/><path d="M30 34l3 3M70 34l-3 3M50 26v4M38 28l1.6 3.4M62 28l-1.6 3.4" stroke-width=".8"/>',
+    dinner: '<ellipse cx="50" cy="54" rx="25" ry="6"/><path d="M25 54c0 12 2 24 4 31h42c2-7 4-19 4-31"/><path d="M36 60c1 8 1 17 0 25M50 60v25M64 60c-1 8-1 17 0 25" stroke-width=".7"/><path d="M29 85q21 4 42 0"/>' +
+      '<path d="M41 49v-6M38 49h6M41 43c-2.6 0-3.6-3-3.6-7h7.2c0 4-1 7-3.6 7zM59 49v-6M56 49h6M59 43c-2.6 0-3.6-3-3.6-7h7.2c0 4-1 7-3.6 7z" stroke-width=".9"/>' +
+      '<path d="M8 36v53M20 42v47M8 36q7-2 12 6M8 64h12M8 46l12 14M20 46 8 60"/><path d="M92 36v53M80 42v47M92 36q-7-2-12 6M80 64h12M92 46 80 60M80 46l12 14"/>',
+    lotus: '<path d="M50 74C42 64 41 48 50 32c9 16 8 32 0 42z"/><path d="M50 74C38 70 30 58 30 44c10 4 18 14 20 30zM50 74c12-4 20-16 20-30-10 4-18 14-20 30z"/>' +
+      '<path d="M48 74C34 76 22 70 16 60c11-3 24 1 32 14zM52 74c14 2 26-4 32-14-11-3-24 1-32 14z"/><path d="M50 40v28M40 52c4 6 7 13 9 20M60 52c-4 6-7 13-9 20" stroke-width=".6"/>' +
+      '<path d="M50 74v18M38 84q12-5 24 0" stroke-width=".9"/>'
   };
   var MATCH = [
     [/wedding|phera|anand karaj|mandap|nikah|vivah|shaadi|ceremony/i, 'mandap'],
@@ -147,8 +168,8 @@
   function eventIcon(ev) {
     var key = ev.icon && ICONS[ev.icon] ? ev.icon : null;
     for (var i = 0; !key && i < MATCH.length; i++) if (MATCH[i][0].test(ev.name || '')) key = MATCH[i][1];
-    key = key || 'marigold';
-    return '<svg viewBox="0 0 64 64" xmlns="' + NS + '" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[key] + '</svg>';
+    key = key || 'lotus';
+    return '<svg viewBox="0 0 100 100" xmlns="' + NS + '" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[key] + '</svg>';
   }
 
   window.SELECT_FX = { waxSeal: waxSeal, petalShower: petalShower, eventIcon: eventIcon, icons: Object.keys(ICONS) };

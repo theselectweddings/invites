@@ -10,13 +10,13 @@
 window.WEDDING = {
 
   /* ---------- Look & feel ----------
-     palette: "champagne" | "select" | "royal" | "emerald" | "rose" | "ocean"
+     palette: "lotus" | "champagne" | "select" | "royal" | "emerald" | "rose" | "ocean"
      art.venue: a watercolour of the venue (wide image, about 3:1) in the images folder, e.g. "images/venue-art.jpg"
      art.florals: true shows the sage floral corners and side borders
      Each event gets a small drawn emblem chosen from its name (mandap, mehndi hand, haldi bowl, rings, dhol, cocktail, diya, dinner).
-     To choose one yourself, add icon: "mandap" | "mehndi" | "haldi" | "rings" | "dhol" | "cocktail" | "diya" | "dinner" | "marigold" to the event.                                   */
-  theme: { palette: "champagne", wax: "#8B1A1F" },   // wax: seal colour (deep red); try "#7A5A1E" for gold wax
-  art: { venue: "", florals: true },
+     To choose one yourself, add icon: "mandap" | "mehndi" | "haldi" | "rings" | "dhol" | "cocktail" | "diya" | "dinner" | "lotus" to the event.                                   */
+  theme: { palette: "lotus", wax: "#9E2F4E" },   // wax: seal colour; e.g. "#8B1A1F" deep red, "#7A5A1E" gold
+  art: { venue: "", florals: true, decor: "lotus" },   // decor: "lotus" (pink lotus) or "sage" (sage florals)
 
   /* true = shows the colour switcher (for The Select only). Set false before sharing with guests. */
   preview: true,
@@ -96,7 +96,7 @@ window.WEDDING = {
   },
 
   contacts: [],   // e.g. [{ name: "Shikha Sharma", role: "Event adviser · The Select", whatsapp: "91XXXXXXXXXX" }]
-  music: "",      // your song: put the MP3 in the images folder, e.g. "images/song.mp3" — it starts when the guest taps the seal
+  music: "default",   // "default" = Na Tum Jano Na Hum · or your own MP3, e.g. "images/our-song.mp3" · or "none" for no music
 
   show: { welcome: true, families: true, countdown: true, events: true, venue: true, gallery: true, rsvp: true, contacts: true }
 };
