@@ -306,3 +306,17 @@ main>.hero,main>.foot{z-index:auto}
 .wrow select{min-height:34px;border:1px solid #ddd;border-radius:8px;background:#fff;font:400 14px system-ui,sans-serif;padding:0 6px}
 .wrow input[type=color]{width:36px;height:34px;padding:0;border:1px solid #ddd;border-radius:8px;background:#fff}
 .wcopy{margin-top:6px;width:100%;min-height:36px;border:1px solid #222;border-radius:8px;background:#fff;font:500 13px system-ui,sans-serif;cursor:pointer;word-break:break-word}
+
+/* wardrobe v2: one illustration + palettes */
+.ward--v2{display:block;max-width:900px}
+.wfeature{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:20px 36px;align-items:center;margin-bottom:46px}
+.wfeature .wcard__img{max-width:440px;width:100%}
+.wfeature__txt{text-align:center}
+.wpals{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:40px 30px}
+.wpal{text-align:center;padding-top:26px;border-top:1px solid var(--line)}
+.wpal--feat{opacity:.75}
+.wpal__dots{display:flex;justify-content:center;margin:6px 0 4px}
+.wpal__dots span{width:54px;height:54px;border-radius:50%;margin-left:-10px;border:3px solid var(--paper);box-shadow:0 4px 10px -4px rgba(0,0,0,.25)}
+.wpal__dots span:first-child{margin-left:0}
+.wfeat{display:flex;align-items:center;gap:6px;margin:8px 0 2px;font:400 13px system-ui,sans-serif;color:#333}
+@media (max-width:700px){.wfeature{grid-template-columns:1fr}}

@@ -255,55 +255,96 @@
   });
 
 
-  /* ---------- wardrobe planner ---------- */
+  /* ---------- wardrobe planner ----------
+     One illustration, dressed in the colours of the featured event (the wedding by default);
+     every other event shows its colour palette. */
   (function () {
     var list = W.wardrobe || [];
     if (!list.length || show.wardrobe === false || !FX || !FX.dressUp) { $('#wardrobe').hidden = true; return; }
     var dir = (art.wardrobePath || 'images/');
-    list.forEach(function (wd, idx) {
-      var card = el('div', 'wcard');
-      card.appendChild(el('p', 'wcard__event', [wd.event, wd.when].filter(Boolean).join(' · ')));
-      if (wd.theme) card.appendChild(el('h3', 'wcard__theme', wd.theme));
-      var fig = el('div', 'wcard__img'), img = el('canvas'); img.setAttribute('role', 'img'); img.setAttribute('aria-label', 'Outfit inspiration for ' + (wd.event || 'the event')); fig.appendChild(img); card.appendChild(fig);
-      var sw = el('ul', 'wcard__sw'); card.appendChild(sw);
-      if (wd.note) card.appendChild(el('p', 'wcard__note', wd.note));
-      var cols = Object.assign({}, wd.colours || {});
-      function swatches() {
-        sw.innerHTML = ''; var seen = {};
-        FX.OUTFITS.forEach(function (o) {
-          var c = cols[o[0]]; if (!c || seen[c]) return; seen[c] = 1;
-          var li = el('li'), dot = el('i'); dot.style.background = FX.hexOf(c); li.appendChild(dot); li.appendChild(document.createTextNode(c.charAt(0) === '#' ? c.toUpperCase() : c)); sw.appendChild(li);
-        });
-      }
-      var tm;
-      function render() { clearTimeout(tm); fig.classList.add('busy'); tm = setTimeout(function () { FX.dressUp(dir, cols).then(function (d) { img.width = d.width; img.height = d.height; img.getContext('2d').putImageData(d, 0, 0); fig.classList.remove('busy'); }).catch(function () { fig.classList.remove('busy'); }); }, 60); swatches(); }
-      if (W.preview) {
-        var ed = el('div', 'wcard__edit');
-        ed.appendChild(el('p', 'wcard__edit-h', 'Choose colours (preview only)'));
-        FX.OUTFITS.forEach(function (o) {
-          var row = el('label', 'wrow'); row.appendChild(el('span', '', o[1]));
-          var sel = el('select'); var none = el('option', '', 'Original'); none.value = ''; sel.appendChild(none);
-          Object.keys(FX.WARDROBE_COLOURS).forEach(function (n) { var op = el('option', '', n); op.value = n; sel.appendChild(op); });
-          var custom = el('option', '', 'Custom colour'); custom.value = '#custom'; sel.appendChild(custom);
-          var pick = el('input'); pick.type = 'color'; pick.value = '#C2185B';
-          var cur = cols[o[0]] || '';
-          if (cur.charAt(0) === '#') { sel.value = '#custom'; pick.value = cur; } else sel.value = cur;
-          pick.hidden = sel.value !== '#custom';
-          sel.addEventListener('change', function () { pick.hidden = sel.value !== '#custom'; cols[o[0]] = sel.value === '#custom' ? pick.value : sel.value; if (!cols[o[0]]) delete cols[o[0]]; render(); });
-          pick.addEventListener('input', function () { cols[o[0]] = pick.value; render(); });
-          row.appendChild(sel); row.appendChild(pick); ed.appendChild(row);
-        });
-        var copy = el('button', 'wcopy', 'Copy these choices'); copy.type = 'button';
-        copy.addEventListener('click', function () {
-          var txt = (wd.event || 'Event') + ': ' + FX.OUTFITS.map(function (o) { return o[1] + ' – ' + (cols[o[0]] || 'original'); }).join(', ');
-          var done = function () { copy.textContent = 'Copied — paste it to Claude'; setTimeout(function () { copy.textContent = 'Copy these choices'; }, 2500); };
-          try { navigator.clipboard.writeText(txt).then(done, function () { copy.textContent = txt; }); } catch (e) { copy.textContent = txt; }
-        });
-        ed.appendChild(copy); card.appendChild(ed);
-      }
-      $('#wardList').appendChild(card);
-      render();
-    });
+    var featured = list.findIndex(function (w) { return w.feature; }); if (featured < 0) featured = list.length - 1;
+    var pals = list.map(function (w) { return (w.palette || []).slice(0, 5); });
+    var wrap = $('#wardList'); wrap.classList.add('ward--v2');
+    var figCard = el('div', 'wfeature'), figBox = el('div', 'wcard__img'), cvs = el('canvas'); cvs.setAttribute('role', 'img');
+    figBox.appendChild(cvs);
+    var figTitle = el('div', 'wfeature__txt');
+    figCard.appendChild(figBox); figCard.appendChild(figTitle);
+    var rows = el('div', 'wpals');
+    wrap.appendChild(figCard); wrap.appendChild(rows);
+    function outfitsFor(p) { return { lehenga: p[0], gown: p[1] || p[0], sherwani: p[2] || p[0], blazer: p[3] || p[1] || p[0] }; }
+    function swatchList(p) {
+      var ul = el('ul', 'wcard__sw');
+      p.forEach(function (c) { if (!c) return; var li = el('li'), dot = el('i'); dot.style.background = FX.hexOf(c); li.appendChild(dot); li.appendChild(document.createTextNode(c.charAt(0) === '#' ? c.toUpperCase() : c)); ul.appendChild(li); });
+      return ul;
+    }
+    var tm;
+    function drawFeature() {
+      var wd = list[featured];
+      figTitle.innerHTML = '';
+      figTitle.appendChild(el('p', 'wcard__event', [wd.event, wd.when].filter(Boolean).join(' · ')));
+      if (wd.theme) figTitle.appendChild(el('h3', 'wcard__theme', wd.theme));
+      figTitle.appendChild(swatchList(pals[featured]));
+      if (wd.note) figTitle.appendChild(el('p', 'wcard__note', wd.note));
+      cvs.setAttribute('aria-label', 'Outfit inspiration for ' + (wd.event || 'the wedding'));
+      clearTimeout(tm); figBox.classList.add('busy');
+      tm = setTimeout(function () {
+        FX.dressUp(dir, outfitsFor(pals[featured])).then(function (d) { cvs.width = d.width; cvs.height = d.height; cvs.getContext('2d').putImageData(d, 0, 0); figBox.classList.remove('busy'); }).catch(function () { figBox.classList.remove('busy'); });
+      }, 60);
+    }
+    function drawRows() {
+      rows.innerHTML = '';
+      list.forEach(function (wd, idx) {
+        if (idx === featured && !W.preview) return;
+        var r = el('div', 'wpal' + (idx === featured ? ' wpal--feat' : ''));
+        r.appendChild(el('p', 'wcard__event', [wd.event, wd.when].filter(Boolean).join(' · ')));
+        if (wd.theme) r.appendChild(el('h3', 'wcard__theme', wd.theme));
+        var big = el('div', 'wpal__dots');
+        pals[idx].forEach(function (c) { if (!c) return; var d = el('span'); d.style.background = FX.hexOf(c); d.title = c; big.appendChild(d); });
+        r.appendChild(big);
+        r.appendChild(swatchList(pals[idx]));
+        if (wd.note) r.appendChild(el('p', 'wcard__note', wd.note));
+        if (W.preview) r.appendChild(editor(idx));
+        rows.appendChild(r);
+      });
+    }
+    function editor(idx) {
+      var ed = el('div', 'wcard__edit');
+      ed.appendChild(el('p', 'wcard__edit-h', 'Colour palette (preview only)'));
+      for (var k = 0; k < 4; k++) (function (k) {
+        var row = el('label', 'wrow'); row.appendChild(el('span', '', 'Colour ' + (k + 1)));
+        var sel = el('select'), none = el('option', '', k ? '—' : 'Choose'); none.value = ''; sel.appendChild(none);
+        Object.keys(FX.WARDROBE_COLOURS).forEach(function (n) { var op = el('option', '', n); op.value = n; sel.appendChild(op); });
+        var custom = el('option', '', 'Custom colour'); custom.value = '#custom'; sel.appendChild(custom);
+        var pick = el('input'); pick.type = 'color'; pick.value = '#C2185B';
+        var cur = pals[idx][k] || '';
+        if (cur.charAt(0) === '#') { sel.value = '#custom'; pick.value = cur; } else sel.value = cur;
+        pick.hidden = sel.value !== '#custom';
+        function set(v) { pals[idx][k] = v; pals[idx] = pals[idx].filter(function (x, i) { return x || i < k; }); update(idx); }
+        sel.addEventListener('change', function () { pick.hidden = sel.value !== '#custom'; set(sel.value === '#custom' ? pick.value : sel.value); });
+        pick.addEventListener('change', function () { set(pick.value); });
+        row.appendChild(sel); row.appendChild(pick); ed.appendChild(row);
+      })(k);
+      var feat = el('label', 'wfeat'), rb = el('input'); rb.type = 'radio'; rb.name = 'wfeat'; rb.checked = idx === featured;
+      rb.addEventListener('change', function () { featured = idx; drawFeature(); drawRows(); });
+      feat.appendChild(rb); feat.appendChild(document.createTextNode(' Dress the models in this palette')); ed.appendChild(feat);
+      var copy = el('button', 'wcopy', 'Copy these choices'); copy.type = 'button';
+      copy.addEventListener('click', function () {
+        var txt = list.map(function (w, i) { return (w.event || 'Event') + ': ' + (pals[i].filter(Boolean).join(', ') || '—') + (i === featured ? ' (models)' : ''); }).join(' | ');
+        try { navigator.clipboard.writeText(txt).then(function () { copy.textContent = 'Copied — paste it to Claude'; setTimeout(function () { copy.textContent = 'Copy these choices'; }, 2500); }, function () { copy.textContent = txt; }); } catch (x) { copy.textContent = txt; }
+      });
+      ed.appendChild(copy);
+      return ed;
+    }
+    function update(idx) {
+      if (idx === featured) drawFeature();
+      var rowsEls = rows.children, pos = 0;
+      for (var i = 0; i < list.length; i++) { if (i === featured && !W.preview) continue; if (i === idx) break; pos++; }
+      var r = rowsEls[pos]; if (!r) return;
+      var big = r.querySelector('.wpal__dots'); big.innerHTML = '';
+      pals[idx].forEach(function (c) { if (!c) return; var d = el('span'); d.style.background = FX.hexOf(c); d.title = c; big.appendChild(d); });
+      var old = r.querySelector('.wcard__sw'); old.replaceWith(swatchList(pals[idx]));
+    }
+    drawFeature(); drawRows();
   })();
 
   /* ---------- venue ---------- */

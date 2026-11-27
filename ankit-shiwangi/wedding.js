@@ -103,18 +103,20 @@ window.WEDDING = {
   ],
 
   /* ---------- Wardrobe planner ----------
-     Each card recolours the outfit illustration. Colours by name (Ivory, Champagne, Gold, Silver, Blush, Rose, Rani Pink,
-     Peach, Coral, Marigold, Turmeric, Lemon, Mint, Pistachio, Emerald, Bottle Green, Powder Blue, Royal Blue, Navy, Lilac,
-     Purple, Wine, Maroon, Red, Black) or any colour code like "#C2185B". Leave one out to keep the original.          */
+     palette: 2–4 colours per event, by name (Ivory, Champagne, Gold, Silver, Blush, Rose, Rani Pink, Peach, Coral,
+     Marigold, Turmeric, Lemon, Mint, Pistachio, Emerald, Bottle Green, Powder Blue, Royal Blue, Navy, Lilac, Purple,
+     Wine, Maroon, Red, Black) or any colour code like "#C2185B".
+     feature: true = the illustrated models wear this event's palette (colour 1 lehenga, 2 gown, 3 sherwani, 4 blazer & turban).
+     Every other event shows its palette as colour swatches.                                                   */
   wardrobe: [
     { event: "Mehndi Lunch", when: "28th February", theme: "Garden greens", note: "Fresh greens with a pop of pink.",
-      colours: { lehenga: "Pistachio", gown: "Mint", sherwani: "Emerald", blazer: "Rani Pink" } },
+      palette: ["Pistachio", "Mint", "Emerald", "Rani Pink"] },
     { event: "Engagement & Sangeet", when: "28th February", theme: "Shimmer all the way", note: "Sequins, shine and midnight tones.",
-      colours: { lehenga: "Black", gown: "Navy", sherwani: "Black", blazer: "Emerald" } },
+      palette: ["Black", "Navy", "Emerald", "Silver"] },
     { event: "Haldi Brunch", when: "1st March", theme: "Sunshine yellows", note: "Turmeric, marigold and soft peach.",
-      colours: { lehenga: "Turmeric", gown: "Peach", sherwani: "Ivory", blazer: "Marigold" } },
+      palette: ["Turmeric", "Peach", "Ivory", "Marigold"] },
     { event: "Wedding Ceremony", when: "1st March", theme: "Royal jewel tones", note: "Rich jewel tones with gold.",
-      colours: { lehenga: "Maroon", gown: "Royal Blue", sherwani: "Emerald", blazer: "Purple" } }
+      palette: ["Maroon", "Royal Blue", "Emerald", "Purple"], feature: true }
   ],
 
   /* ---------- Venue ----------
