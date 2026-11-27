@@ -17,8 +17,8 @@ window.WEDDING = {
      art.florals: true shows the sage floral corners and side borders
      Each event gets a small drawn emblem chosen from its name (mandap, mehndi hand, haldi bowl, rings, dhol, cocktail, diya, dinner).
      To choose one yourself, add icon: "mandap" | "mehndi" | "haldi" | "rings" | "dhol" | "cocktail" | "diya" | "dinner" | "lotus" to the event.                                   */
-  theme: { palette: "lotus", wax: "#9E2F4E", sealImage: "", iconColor: "theme", artColor: "theme" },   // sealImage: the couple's wax-seal picture, e.g. "images/seal.png" · leave "" for a drawn seal in the wax colour · iconColor: event emblem colour — "ink", "theme", "gold", "sage", "rose" or a colour code
-  art: { venue: "", florals: true, decor: "lotus", events: true, doorPrint: "lotus" },   // doorPrint: opening card "lotus" | "plain" | "sage" · decor: side border "lotus" | "sage" (florals: false = none)
+  theme: { pack: "lotus", palette: "", wax: "", sealImage: "", iconColor: "theme", artColor: "theme" },   // pack: the design theme — "lotus" | "palace" | "beach" | "hillside" | "arabian" (sets the graphics, patterns, petals and a matching palette) · palette: leave "" to use the theme's own · sealImage: the couple's wax-seal picture, e.g. "images/seal.png" · leave "" for a drawn seal in the wax colour · iconColor: event emblem colour — "ink", "theme", "gold", "sage", "rose" or a colour code
+  art: { venue: "", florals: true, decor: "", events: true, doorPrint: "" },   // doorPrint: leave "" for the theme's own print, or "lotus" | "plain" | "sage" | "palace" | "beach" | "hillside" | "arabian" · decor: leave "" for the theme's growing border, or "sage" (florals: false = none) · pattern: false hides the faint background pattern
 
   /* true = shows the colour switcher (for The Select only). Set false before sharing with guests. */
   preview: true,

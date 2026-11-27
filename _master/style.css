@@ -326,7 +326,7 @@ main>.hero,main>.foot{z-index:auto}
 .gf-door{position:absolute;top:0;bottom:0;width:calc(50% + 16px);z-index:1;transition:transform 1.7s cubic-bezier(.55,.05,.3,1) .9s;backface-visibility:hidden;-webkit-backface-visibility:hidden;filter:drop-shadow(0 0 10px rgba(80,58,30,.28))}
 .gf-door--l{left:0;transform-origin:0 50%}
 .gf-door--r{right:0;transform-origin:100% 50%}
-.gf-face{position:absolute;inset:0;background-color:#F2E9DC;background-image:var(--door-l),var(--paper-tex);background-size:clamp(150px,19vw,270px) auto,512px 512px;background-repeat:repeat,repeat}
+.gf-face{position:absolute;inset:0;background-color:var(--door-paper,#FFFFFF);background-image:var(--door-l),var(--paper-tex);background-size:var(--door-size,clamp(150px,19vw,270px)) auto,512px 512px;background-blend-mode:normal,multiply;background-repeat:repeat,repeat}
 .gf-door--r .gf-face{background-image:var(--door-r),var(--paper-tex);background-position:right top,0 0}
 .gf-door--l .gf-face{-webkit-mask:linear-gradient(#000 0 0) left/calc(100% - 24px) 100% no-repeat,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 160' preserveAspectRatio='none'%3E%3Cpath d='M0 0H4C26 22 26 58 4 80C26 102 26 138 4 160H0Z'/%3E%3C/svg%3E") right top/24px 160px repeat-y;
   mask:linear-gradient(#000 0 0) left/calc(100% - 24px) 100% no-repeat,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 160' preserveAspectRatio='none'%3E%3Cpath d='M0 0H4C26 22 26 58 4 80C26 102 26 138 4 160H0Z'/%3E%3C/svg%3E") right top/24px 160px repeat-y}
@@ -356,3 +356,7 @@ main>.hero,main>.foot{z-index:auto}
 .gf.open{background:transparent;transition:background .8s 1s}
 .opening.gf.open .opening__centre{opacity:1}
 @media (prefers-reduced-motion:reduce){.gf.open{opacity:0}}
+
+/* ---------- theme packs: faint background pattern ---------- */
+.has-pat body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.07;background-image:var(--bg-pat);background-size:auto}
+@media (max-width:640px){.has-pat body::after{opacity:.06}}

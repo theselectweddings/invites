@@ -80,9 +80,10 @@
     var host = document.createElement('div'); host.className = 'petal-rain';
     document.body.appendChild(host);
     var count = opts.count || (window.innerWidth < 600 ? 28 : 48);
+    var sets = opts.colors || REDS, shape = opts.shape || PETAL;
     for (var i = 0; i < count; i++) {
-      var c = REDS[i % REDS.length], fall = document.createElement('div'), spin = document.createElement('div');
-      var size = 14 + Math.random() * 18;
+      var c = sets[i % sets.length], fall = document.createElement('div'), spin = document.createElement('div');
+      var size = 14 + (opts.size || 0) + Math.random() * 18;
       fall.className = 'petal-fall';
       fall.style.left = (Math.random() * 104 - 2) + 'vw';
       fall.style.width = size + 'px'; fall.style.height = (size * 1.08) + 'px';
@@ -93,7 +94,7 @@
       spin.style.animationDuration = (1.6 + Math.random() * 2.2) + 's';
       spin.style.setProperty('--rx', (Math.random() * 2 - 1).toFixed(2));
       spin.style.setProperty('--ry', (Math.random() * 2 - 1).toFixed(2));
-      spin.innerHTML = PETAL.replace(/\{i\}/g, 'x' + i).replace(/\{a\}/g, c[0]).replace(/\{b\}/g, c[1]).replace(/\{c\}/g, c[2]);
+      spin.innerHTML = shape.replace(/\{i\}/g, 'x' + i).replace(/\{a\}/g, c[0]).replace(/\{b\}/g, c[1]).replace(/\{c\}/g, c[2]);
       fall.appendChild(spin); host.appendChild(fall);
     }
     setTimeout(function () { host.classList.add('done'); }, 7600);

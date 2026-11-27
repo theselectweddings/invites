@@ -46,7 +46,13 @@
     return node;
   }
 
-  var pal = PALETTES[(W.theme || {}).palette] ? W.theme.palette : 'lotus';
+  /* theme pack: lotus | palace | beach | hillside | arabian (themes.js) */
+  var TH = window.SELECT_THEMES;
+  var packName = (W.theme || {}).pack || 'lotus';
+  try { var qp = new URLSearchParams(location.search).get('theme'); if (W.preview && qp) packName = qp; } catch (e) {}
+  if (!TH || !TH.packs[packName]) packName = 'lotus';
+  var PACK = TH ? TH.packs[packName] : { palette: 'lotus', door: 'lotus' };
+  var pal = PALETTES[(W.theme || {}).palette] && packName === ((W.theme || {}).pack || 'lotus') ? W.theme.palette : (PALETTES[PACK.palette] ? PACK.palette : 'lotus');
   var tintSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   tintSvg.setAttribute('width', '0'); tintSvg.setAttribute('height', '0'); tintSvg.style.position = 'absolute';
   tintSvg.innerHTML = '<filter id="artTint" color-interpolation-filters="sRGB"><feColorMatrix type="saturate" values="0" result="g"/><feComponentTransfer in="g" result="m"><feFuncR type="table"/><feFuncG type="table"/><feFuncB type="table"/></feComponentTransfer><feComposite in="m" in2="SourceGraphic" operator="arithmetic" k2=".75" k3=".25"/></filter>';
@@ -73,19 +79,22 @@
 
   /* ---------- artwork ---------- */
   var art = W.art || {};
-  var decorPath = art.floralPath || (art.decor === 'sage' ? 'images/floral-' : 'images/lotus-');
-  var lotusGarden = art.florals !== false && art.decor !== 'sage' && window.SELECT_FX;
-  if (lotusGarden) {
+  // side decoration: the pack's growing border unless the wedding chooses "lotus" / "sage" itself
+  var decor = art.decor && (art.decor === 'sage' || packName === 'lotus' || art.decor !== 'lotus') ? art.decor : packName;
+  var decorPath = art.floralPath || (decor === 'sage' ? 'images/floral-' : 'images/lotus-');
+  var growing = art.florals !== false && decor !== 'sage' && window.SELECT_FX;
+  var gd = null, lastH = 0, buildGarden = function () {};
+  if (growing) {
     document.documentElement.classList.add('decor-lotus');
-    var gd = document.createElement('div'); gd.className = 'garden'; document.body.appendChild(gd);
-    var lastH = 0;
-    var buildGarden = function () {
+    gd = document.createElement('div'); gd.className = 'garden'; document.body.appendChild(gd);
+    buildGarden = function (force) {
       var wpx = parseFloat(getComputedStyle(gd).getPropertyValue('--lgw')) || 0;
       var probe = document.createElement('div'); probe.style.cssText = 'position:fixed;width:var(--lgw);height:0'; document.body.appendChild(probe);
       wpx = probe.getBoundingClientRect().width || 160; probe.remove();
       var H = Math.round(190 * (window.innerHeight + 4) / wpx);
-      if (Math.abs(H - lastH) < 40) return; lastH = H;
-      gd.innerHTML = window.SELECT_FX.garden('l', H) + window.SELECT_FX.garden('r', H);
+      if (!force && Math.abs(H - lastH) < 40) return; lastH = H;
+      gd.innerHTML = TH && TH.hasGarden(decor) ? TH.garden(decor, 'l', H) + TH.garden(decor, 'r', H)
+        : window.SELECT_FX.garden('l', H) + window.SELECT_FX.garden('r', H);
     };
     buildGarden();
     var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(buildGarden, 250); });
@@ -130,19 +139,38 @@
     for (var s = 0; s < 260; s++) { x.fillStyle = 'rgba(120,95,65,' + (.18 + Math.random() * .3) + ')'; x.beginPath(); x.arc(Math.random() * 512, Math.random() * 512, .4 + Math.random() * 1.1, 0, 7); x.fill(); }
     var r = document.documentElement.style;
     r.setProperty('--paper-tex', 'url(' + cv.toDataURL('image/png') + ')');
-    // opening card print: "lotus" (default), "plain" (no print) or "sage" (sage florals)
-    var dp = (W.art && W.art.doorPrint) || 'lotus';
-    var pre = dp === 'plain' ? '' : dp === 'sage' ? 'images/door-sage-' : dp === 'lotus' ? 'images/door-lotus-' : dp;
-    r.setProperty('--door-l', pre ? 'url("' + pre + 'l.png")' : 'none');
-    r.setProperty('--door-r', pre ? 'url("' + pre + 'r.png")' : 'none');
   })();
+  // opening card print: the pack's print, or "lotus" | "sage" | "plain" | "palace" | "beach" | "hillside" | "arabian"
+  function applyPack(fromSwitch) {
+    var r = document.documentElement.style;
+    var dp = (!fromSwitch && W.art && W.art.doorPrint) || PACK.door || 'lotus';
+    r.setProperty('--door-paper', PACK.paper || '#FFFFFF');
+    if (TH && TH.hasTile(dp)) {
+      var t = TH.tile(dp, PACK.doorInk || '#8A6A3A', .5);
+      r.setProperty('--door-l', t); r.setProperty('--door-r', t); r.setProperty('--door-size', dp === 'arabian' ? '64px' : dp === 'palace' ? '90px' : '130px');
+    } else {
+      var pre = dp === 'plain' ? '' : dp === 'sage' ? 'images/door-sage-' : dp === 'lotus' ? 'images/door-lotus-' : dp;
+      r.setProperty('--door-l', pre ? 'url("' + pre + 'l.png")' : 'none');
+      r.setProperty('--door-r', pre ? 'url("' + pre + 'r.png")' : 'none');
+      r.removeProperty('--door-size');
+    }
+    // faint background pattern and the ornament between rules
+    var bt = TH && TH.hasTile(packName) && art.pattern !== false ? TH.tile(packName, PACK.patInk || '#888', .9) : '';
+    r.setProperty('--bg-pat', bt || 'none');
+    document.documentElement.classList.toggle('has-pat', !!bt);
+    var orn = document.getElementById('orn');
+    if (orn) { if (!orn._def) orn._def = orn.innerHTML; orn.innerHTML = (TH && TH.ornament(packName)) || orn._def; }
+  }
+  applyPack(false);
   var FX = window.SELECT_FX;
   var sealImg = (W.theme || {}).sealImage;
   if (sealImg) { var si = el('img', 'seal__img'); si.src = sealImg; si.alt = ''; $('#sealArt').appendChild(si); }
-  else if (FX) $('#sealArt').innerHTML = FX.waxSeal(W.couple.monogram || '', (W.theme || {}).wax);
+  function drawSeal() { if (!sealImg && FX) $('#sealArt').innerHTML = FX.waxSeal(W.couple.monogram || '', (fromPackSwitch ? '' : (W.theme || {}).wax) || PACK.wax); }
+  var fromPackSwitch = false;
+  drawSeal();
   $('#seal').addEventListener('click', function () {
     if (opening.classList.contains('open')) return;
-    if (FX && W.petals !== false) setTimeout(function () { FX.petalShower(); }, reduce ? 0 : 1100);
+    if (FX && W.petals !== false) setTimeout(function () { FX.petalShower(TH ? TH.petals(packName) : {}); }, reduce ? 0 : 1100);
     var gdn = document.querySelector('.garden'); if (gdn) setTimeout(function () { gdn.classList.add('grow'); }, reduce ? 0 : 1600);
     opening.classList.add('open');
     document.body.classList.remove('locked');
@@ -420,13 +448,30 @@
   if (W.preview) {
     var pnl = $('#studioPanel'), tg = $('#studioToggle');
     $('#studio').hidden = false;
+    if (TH) Object.keys(TH.packs).forEach(function (k) {
+      var b = el('button', '', TH.packs[k].label); b.type = 'button'; b.setAttribute('aria-pressed', String(k === packName));
+      b.addEventListener('click', function () {
+        packName = k; PACK = TH.packs[k]; fromPackSwitch = true;
+        $$('#packList button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+        if (PALETTES[PACK.palette]) { pal = PACK.palette; $$('#palList button').forEach(function (x) { x.setAttribute('aria-pressed', String(x.getAttribute('data-pal') === pal)); }); applyPalette(); }
+        applyPack(true); drawSeal();
+        if (gd) { decor = k; buildGarden(true); gd.classList.remove('grow'); void gd.offsetWidth; gd.classList.add('grow'); }
+        if (FX && !reduce) FX.petalShower(TH.petals(k));
+        try { var u = new URL(location.href); u.searchParams.set('theme', k); history.replaceState(null, '', u); } catch (e) {}
+      });
+      $('#packList').appendChild(b);
+    });
+    $('#replayBtn').addEventListener('click', function () {
+      window.scrollTo(0, 0); opening.classList.remove('open', 'gone'); document.body.classList.add('locked');
+      if (gd) gd.classList.remove('grow'); audio.pause(); pnl.hidden = true; tg.setAttribute('aria-expanded', 'false');
+    });
     tg.addEventListener('click', function () { var o = pnl.hidden; pnl.hidden = !o; tg.setAttribute('aria-expanded', String(o)); });
     Object.keys(PALETTES).forEach(function (k) {
       var p = PALETTES[k], b = el('button'); b.type = 'button';
       var sw = el('span', 'studio__sw');
       [p.paper, p.gold, p.sage].forEach(function (c) { var i = el('i'); i.style.background = c; sw.appendChild(i); });
       b.appendChild(sw); b.appendChild(document.createTextNode(p.label));
-      b.setAttribute('aria-pressed', String(k === pal));
+      b.setAttribute('aria-pressed', String(k === pal)); b.setAttribute('data-pal', k);
       b.addEventListener('click', function () { pal = k; $$('#palList button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); applyPalette(); });
       $('#palList').appendChild(b);
     });
