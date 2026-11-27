@@ -84,7 +84,9 @@
   /* ---------- opening ---------- */
   var opening = $('#opening'), audio = $('#music'), mbtn = $('#musicBtn');
   var FX = window.SELECT_FX;
-  if (FX) $('#sealArt').innerHTML = FX.waxSeal(W.couple.monogram || '', (W.theme || {}).wax);
+  var sealImg = (W.theme || {}).sealImage;
+  if (sealImg) { var si = el('img', 'seal__img'); si.src = sealImg; si.alt = ''; $('#sealArt').appendChild(si); }
+  else if (FX) $('#sealArt').innerHTML = FX.waxSeal(W.couple.monogram || '', (W.theme || {}).wax);
   $('#seal').addEventListener('click', function () {
     if (opening.classList.contains('open')) return;
     if (FX && W.petals !== false) FX.petalShower();
