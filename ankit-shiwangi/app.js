@@ -47,6 +47,7 @@
     if (art.florals === false) { img.remove(); return; }
     img.src = (art.floralPath || 'images/floral-') + img.getAttribute('data-floral') + '.png';
   });
+  if (art.florals !== false && art.sides !== false) document.documentElement.style.setProperty('--side-floral', 'url("' + (art.floralPath || 'images/floral-') + 'side.png")');
 
   /* ---------- guest name from link: ?to=Sharma%20Family ---------- */
   var guest = '';

@@ -200,3 +200,15 @@ main,.opening{position:relative;z-index:1}
   *,*::before,*::after{animation:none!important;transition:none!important}
   .rise{opacity:1;transform:none}
 }
+
+/* ---------- floral borders down both sides ---------- */
+main::before,main::after{content:"";position:absolute;top:clamp(150px,18vw,230px);bottom:clamp(140px,22vw,300px);width:clamp(64px,13vw,200px);pointer-events:none;z-index:0;
+  background:var(--side-floral) repeat-y 0 0/100% auto}
+main::before{left:0}
+main::after{right:0;transform:scaleX(-1)}
+main>*{position:relative;z-index:1}
+main>.hero,main>.foot{z-index:auto}
+@media (max-width:640px){
+  main::before,main::after{width:52px;opacity:.75}
+  .sec{padding-left:52px;padding-right:52px}
+}
