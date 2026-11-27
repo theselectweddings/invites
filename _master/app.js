@@ -240,7 +240,7 @@
     (day.events || []).forEach(function (ev) {
       var e = el('div', 'ev');
       var artSrc = FX && art.events !== false ? FX.eventArt(ev) : '';
-      if (artSrc) { var ai = el('img', 'ev__art'); ai.src = artSrc; ai.alt = ''; ai.loading = 'lazy'; e.appendChild(ai); }
+      if (artSrc) { var ai = el('img', 'ev__art'); ai.src = artSrc; ai.alt = ''; e.appendChild(ai); }
       else if (FX) { var ic = el('div', 'ev__icon'); ic.innerHTML = FX.eventIcon(ev); e.appendChild(ic); }
       e.appendChild(el('h3', '', ev.name));
       e.appendChild(el('p', 'ev__time', ev.time));
