@@ -172,5 +172,89 @@
     return '<svg viewBox="0 0 100 100" xmlns="' + NS + '" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[key] + '</svg>';
   }
 
-  window.SELECT_FX = { waxSeal: waxSeal, petalShower: petalShower, eventIcon: eventIcon, icons: Object.keys(ICONS) };
+
+  /* =================== LOTUS GARDEN (grows up, then sways) =================== */
+  var GID = 0;
+  function petalPath(w, h) { return 'M0 0C' + (-w) + ' ' + (-h * .22) + ' ' + (-w * .9) + ' ' + (-h * .78) + ' 0 ' + (-h) + 'C' + (w * .9) + ' ' + (-h * .78) + ' ' + w + ' ' + (-h * .22) + ' 0 0Z'; }
+  function petal(g, r, w, h, kind, open) {
+    var p = petalPath(w, h);
+    var veins = '';
+    for (var v = -2; v <= 2; v++) veins += 'M' + (v * w * .12).toFixed(1) + ' ' + (-h * .08).toFixed(1) + 'Q' + (v * w * .34).toFixed(1) + ' ' + (-h * .5).toFixed(1) + ' ' + (v * w * .1).toFixed(1) + ' ' + (-h * .93).toFixed(1);
+    return '<g class="lg-pt" style="--r:' + r + 'deg;--r0:' + (r * open).toFixed(1) + 'deg">' +
+      '<path d="' + p + '" fill="url(#' + g + (kind === 'b' ? 'pb' : 'pf') + ')"/>' +
+      '<path d="' + p + '" fill="url(#' + g + 'pe)"/>' +
+      '<path d="' + veins + '" fill="none" stroke="#C9466F" stroke-opacity=".16" stroke-width=".6"/>' +
+      '<path d="M0 ' + (-h * .1).toFixed(1) + 'Q' + (-w * .15).toFixed(1) + ' ' + (-h * .5).toFixed(1) + ' 0 ' + (-h * .88).toFixed(1) + '" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="' + (w * .16).toFixed(1) + '" stroke-linecap="round" filter="url(#' + g + 'soft)"/>' +
+      '</g>';
+  }
+  function flower(g, s, state) { // state: 1 open bloom, .45 half open, 0 bud
+    var out = '';
+    if (state === 0) {
+      out += petal(g, -9, 15, 48, 'b', .3) + petal(g, 9, 15, 48, 'b', .3) + petal(g, -3, 17, 54, 'f', .3) + petal(g, 4, 16, 52, 'f', .3);
+      return '<g transform="scale(' + s + ')">' + out + '</g>';
+    }
+    var o = state;
+    [[-78, 21, 46], [78, 21, 46], [-56, 23, 54], [56, 23, 54]].forEach(function (p) { out += petal(g, p[0] * o + (1 - o) * p[0] * .35, p[1], p[2], 'b', .2); });
+    [[-32, 23, 60], [32, 23, 60], [-11, 22, 64], [11, 22, 64]].forEach(function (p) { out += petal(g, p[0] * (o * .9 + .1), p[1], p[2], 'b', .2); });
+    // seed pod and stamens
+    var st = '';
+    for (var i = 0; i < 26; i++) { var a = -Math.PI + i / 25 * Math.PI, x = Math.cos(a) * 13, y = -14 + Math.sin(a) * 4; st += 'M' + (x * .6).toFixed(1) + ' -10L' + x.toFixed(1) + ' ' + (y - 4).toFixed(1); }
+    out += '<path d="' + st + '" stroke="url(#' + g + 'stm)" stroke-width="1.3" stroke-linecap="round" fill="none"/>';
+    out += '<path d="M-10 -12c0-5 4-8 10-8s10 3 10 8c-3 3-17 3-20 0z" fill="url(#' + g + 'pod)"/>' +
+      '<g fill="#B9C15A" opacity=".9"><circle cx="-4" cy="-16" r="1.2"/><circle cx="1" cy="-17" r="1.2"/><circle cx="5.5" cy="-15.6" r="1.1"/><circle cx="-1.5" cy="-14" r="1"/></g>';
+    [[-50, 25, 40, -3], [50, 25, 40, 3], [-25, 26, 46, -2], [25, 26, 46, 2], [0, 25, 44, 0]].forEach(function (p) { out += '<g transform="translate(' + p[3] + ' 6)">' + petal(g, p[0] * o, p[1], p[2], 'f', .15) + '</g>'; });
+    return '<g transform="scale(' + s + ')">' + out + '</g>';
+  }
+  function pad(g, rx, ry, curl, shade) {
+    var e = '', N = 48;
+    for (var k = 0; k <= N; k++) { var a = .14 + k / N * (Math.PI * 2 - .28), w = 1 + .045 * Math.sin(a * 7) + .03 * Math.sin(a * 13); e += (k ? 'L' : 'M') + (Math.cos(a) * rx * w).toFixed(1) + ' ' + (Math.sin(a) * ry * w).toFixed(1); }
+    e += 'L0 0Z';
+    var veins = '';
+    for (var i = 0; i < 16; i++) { var b = .3 + i / 16 * (Math.PI * 2 - .6); veins += 'M0 0Q' + (Math.cos(b) * rx * .5 + Math.sin(b) * 2).toFixed(1) + ' ' + (Math.sin(b) * ry * .5).toFixed(1) + ' ' + (Math.cos(b) * rx * .92).toFixed(1) + ' ' + (Math.sin(b) * ry * .92).toFixed(1); }
+    var c = curl ? '<path d="M' + (rx * .35).toFixed(1) + ' ' + (-ry * .95).toFixed(1) + 'C' + (rx * .9).toFixed(1) + ' ' + (-ry * 1.25).toFixed(1) + ' ' + (rx * 1.15).toFixed(1) + ' ' + (-ry * .4).toFixed(1) + ' ' + (rx * .98).toFixed(1) + ' ' + (-ry * .05).toFixed(1) + 'C' + (rx * .8).toFixed(1) + ' ' + (-ry * .55).toFixed(1) + ' ' + (rx * .6).toFixed(1) + ' ' + (-ry * .85).toFixed(1) + ' ' + (rx * .35).toFixed(1) + ' ' + (-ry * .95).toFixed(1) + 'Z" fill="url(#' + g + 'under)"/>' : '';
+    return '<path d="' + e + '" fill="url(#' + g + (shade ? 'padD' : 'pad') + ')"/>' +
+      '<path d="' + e + '" fill="none" stroke="#3F6A2B" stroke-opacity=".35" stroke-width=".9"/>' +
+      '<path d="' + veins + '" fill="none" stroke="#EEF5C8" stroke-opacity=".45" stroke-width=".8"/>' +
+      '<ellipse cx="0" cy="0" rx="' + (rx * .06).toFixed(1) + '" ry="' + (ry * .08).toFixed(1) + '" fill="#E8F0B0" opacity=".8"/>' + c;
+  }
+  // a plant: stem from base (0,0) up to tip, with a flower / bud / pad at the tip
+  function plant(g, spec) {
+    var tx = spec.x, ty = spec.y, cx = spec.cx === undefined ? tx * .2 : spec.cx, cy = ty * .55;
+    var stem = '<path class="lg-stem" pathLength="1" d="M0 0Q' + cx + ' ' + cy + ' ' + tx + ' ' + ty + '" stroke="url(#' + g + 'stem)" stroke-width="' + (spec.w || 3) + '" fill="none" stroke-linecap="round"/>';
+    var top;
+    if (spec.pad) top = '<g transform="translate(' + tx + ' ' + ty + ') rotate(' + (spec.rot || 0) + ')"><g class="lg-leaf" style="--d:' + (spec.d + 1.1) + 's">' + pad(g, spec.pad[0], spec.pad[1], spec.curl, spec.shade) + '</g></g>';
+    else top = '<g transform="translate(' + tx + ' ' + ty + ') rotate(' + (spec.rot || 0) + ')"><g class="lg-flower" style="--d:' + (spec.d + 1.2) + 's">' + flower(g, spec.s || 1, spec.state) + '</g></g>';
+    return '<g transform="translate(' + spec.bx + ' 480)"><g class="lg-plant" style="--d:' + spec.d + 's;--sw:' + (5 + (spec.bx % 4)) + 's;--a:' + (spec.a || 1.4) + 'deg">' +
+      '<g class="lg-grow" style="--d:' + spec.d + 's">' + stem + '</g>' + top + '</g></g>';
+  }
+  function garden(side) {
+    var g = 'lg' + (++GID);
+    var defs = '<defs>' +
+      '<linearGradient id="' + g + 'pf" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FFFBF8"/><stop offset=".35" stop-color="#FDE3E8"/><stop offset=".72" stop-color="#F4A9BD"/><stop offset="1" stop-color="#DB5F87"/></linearGradient>' +
+      '<linearGradient id="' + g + 'pb" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FBE5EA"/><stop offset=".45" stop-color="#F2B2C3"/><stop offset=".85" stop-color="#DE6E92"/><stop offset="1" stop-color="#C94A73"/></linearGradient>' +
+      '<radialGradient id="' + g + 'pe" cx="50%" cy="60%" r="62%"><stop offset=".55" stop-color="#D9557F" stop-opacity="0"/><stop offset="1" stop-color="#C2416B" stop-opacity=".45"/></radialGradient>' +
+      '<radialGradient id="' + g + 'pod" cx="50%" cy="30%" r="70%"><stop offset="0" stop-color="#F3EC9A"/><stop offset="1" stop-color="#C9B545"/></radialGradient>' +
+      '<linearGradient id="' + g + 'stm" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#F5D56B"/><stop offset="1" stop-color="#E9A93A"/></linearGradient>' +
+      '<radialGradient id="' + g + 'pad" cx="45%" cy="40%" r="68%"><stop offset="0" stop-color="#D9E79A"/><stop offset=".5" stop-color="#A8C562"/><stop offset="1" stop-color="#6E9A3F"/></radialGradient>' +
+      '<radialGradient id="' + g + 'padD" cx="45%" cy="40%" r="68%"><stop offset="0" stop-color="#B7CF74"/><stop offset=".6" stop-color="#83A84A"/><stop offset="1" stop-color="#557F33"/></radialGradient>' +
+      '<linearGradient id="' + g + 'under" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E7EDB8"/><stop offset="1" stop-color="#B3C77A"/></linearGradient>' +
+      '<linearGradient id="' + g + 'stem" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8DAA55"/><stop offset=".5" stop-color="#A9C46C"/><stop offset="1" stop-color="#6F8F3E"/></linearGradient>' +
+      '<filter id="' + g + 'soft"><feGaussianBlur stdDeviation="1.6"/></filter>' +
+      '</defs>';
+    var P = [
+      { bx: 20, x: 10, y: -380, s: .7, state: 0, d: .9, w: 2.4, a: 2 },
+      { bx: 40, x: -6, y: -300, s: 1.05, state: 1, d: .2, a: 1.2 },
+      { bx: 96, x: 30, y: -200, s: .78, state: .45, d: .5, rot: 8, a: 1.8 },
+      { bx: 140, x: 50, y: -120, s: .6, state: 0, d: 1.1, w: 2.2, rot: 14, a: 2.2 },
+      { bx: 70, x: 70, y: -150, pad: [74, 26], rot: -6, d: .3, shade: true, a: 1 },
+      { bx: 10, x: 18, y: -210, pad: [60, 22], rot: 10, curl: true, d: .6, a: 1.3 },
+      { bx: 120, x: 110, y: -60, pad: [86, 28], rot: -4, d: .1, curl: true, a: .8 },
+      { bx: 0, x: 30, y: -40, pad: [64, 22], rot: 6, shade: true, d: 0, a: .6 }
+    ];
+    var body = P.map(function (s) { return plant(g, s); }).join('');
+    return '<svg class="lg lg--' + side + '" viewBox="-60 0 340 480" preserveAspectRatio="xMinYMax meet" xmlns="' + NS + '" aria-hidden="true">' + defs +
+      '<g' + (side === 'r' ? ' transform="translate(220 0) scale(-1 1)"' : '') + '>' + body + '</g></svg>';
+  }
+
+  window.SELECT_FX = { garden: garden, waxSeal: waxSeal, petalShower: petalShower, eventIcon: eventIcon, icons: Object.keys(ICONS) };
 })();

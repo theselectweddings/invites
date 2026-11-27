@@ -43,6 +43,12 @@
   /* ---------- artwork ---------- */
   var art = W.art || {};
   var decorPath = art.floralPath || (art.decor === 'sage' ? 'images/floral-' : 'images/lotus-');
+  var lotusGarden = art.florals !== false && art.decor !== 'sage' && window.SELECT_FX;
+  if (lotusGarden) {
+    document.documentElement.classList.add('decor-lotus');
+    var gd = document.createElement('div'); gd.className = 'garden'; gd.innerHTML = window.SELECT_FX.garden('l') + window.SELECT_FX.garden('r');
+    document.body.appendChild(gd);
+  }
   if (art.venue) { $('#artImg').src = art.venue; $('#artImg').alt = 'Watercolour of ' + (W.venue && W.venue.name || 'the venue'); }
   else $('#art').hidden = true;
   $$('[data-floral]').forEach(function (img) {
@@ -72,6 +78,7 @@
   $('#seal').addEventListener('click', function () {
     if (opening.classList.contains('open')) return;
     if (FX && W.petals !== false) FX.petalShower();
+    var gdn = document.querySelector('.garden'); if (gdn) setTimeout(function () { gdn.classList.add('grow'); }, 500);
     opening.classList.add('open');
     document.body.classList.remove('locked');
     if (W.music) { mbtn.hidden = false; var p = audio.play(); if (p && p.catch) p.catch(function () { mbtn.classList.add('off'); }); }
