@@ -218,16 +218,19 @@
       '<ellipse cx="0" cy="0" rx="' + (rx * .06).toFixed(1) + '" ry="' + (ry * .08).toFixed(1) + '" fill="#E8F0B0" opacity=".8"/>' + c;
   }
   // a plant: stem from base (0,0) up to tip, with a flower / bud / pad at the tip
-  function plant(g, spec) {
-    var tx = spec.x, ty = spec.y, cx = spec.cx === undefined ? tx * .2 : spec.cx, cy = ty * .55;
-    var stem = '<path class="lg-stem" pathLength="1" d="M0 0Q' + cx + ' ' + cy + ' ' + tx + ' ' + ty + '" stroke="url(#' + g + 'stem)" stroke-width="' + (spec.w || 3) + '" fill="none" stroke-linecap="round"/>';
+  function plant(g, spec, H) {
+    var tx = spec.x, ty = spec.y, cx = spec.cx === undefined ? tx * .15 : spec.cx, cy = ty * .55;
+    var dur = (1.1 + Math.min(2.2, -ty / 420)).toFixed(2), tipD = (spec.d + dur * .85).toFixed(2);
+    var stem = '<path class="lg-stem" pathLength="1" style="--d:' + spec.d + 's;--dur:' + dur + 's" d="M0 0Q' + cx + ' ' + cy + ' ' + tx + ' ' + ty + '" stroke="url(#' + g + 'stem)" stroke-width="' + (spec.w || 3) + '" fill="none" stroke-linecap="round"/>';
     var top;
-    if (spec.pad) top = '<g transform="translate(' + tx + ' ' + ty + ') rotate(' + (spec.rot || 0) + ')"><g class="lg-leaf" style="--d:' + (spec.d + 1.1) + 's">' + pad(g, spec.pad[0], spec.pad[1], spec.curl, spec.shade) + '</g></g>';
-    else top = '<g transform="translate(' + tx + ' ' + ty + ') rotate(' + (spec.rot || 0) + ')"><g class="lg-flower" style="--d:' + (spec.d + 1.2) + 's">' + flower(g, spec.s || 1, spec.state) + '</g></g>';
-    return '<g transform="translate(' + spec.bx + ' 480)"><g class="lg-plant" style="--d:' + spec.d + 's;--sw:' + (5 + (spec.bx % 4)) + 's;--a:' + (spec.a || 1.4) + 'deg">' +
-      '<g class="lg-grow" style="--d:' + spec.d + 's">' + stem + '</g>' + top + '</g></g>';
+    if (spec.pad) top = '<g transform="translate(' + tx + ' ' + ty + ') rotate(' + (spec.rot || 0) + ')"><g class="lg-leaf" style="--d:' + tipD + 's">' + pad(g, spec.pad[0], spec.pad[1], spec.curl, spec.shade) + '</g></g>';
+    else top = '<g transform="translate(' + tx + ' ' + ty + ') rotate(' + (spec.rot || 0) + ')"><g class="lg-flower" style="--d:' + tipD + 's">' + flower(g, spec.s || 1, spec.state) + '</g></g>';
+    return '<g transform="translate(' + spec.bx + ' ' + H + ')"><g class="lg-plant" style="--d:' + spec.d + 's;--sw:' + spec.sw + 's;--a:' + spec.a + 'deg">' + stem + top + '</g></g>';
   }
-  function garden(side) {
+  function rnd(seed) { var x = Math.sin(seed * 999.7) * 10000; return x - Math.floor(x); }
+  // H = height of the column in drawing units (width is always 190 units)
+  function garden(side, H) {
+    H = Math.max(420, Math.round(H || 1000));
     var g = 'lg' + (++GID);
     var defs = '<defs>' +
       '<linearGradient id="' + g + 'pf" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FFFBF8"/><stop offset=".35" stop-color="#FDE3E8"/><stop offset=".72" stop-color="#F4A9BD"/><stop offset="1" stop-color="#DB5F87"/></linearGradient>' +
@@ -241,19 +244,28 @@
       '<linearGradient id="' + g + 'stem" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8DAA55"/><stop offset=".5" stop-color="#A9C46C"/><stop offset="1" stop-color="#6F8F3E"/></linearGradient>' +
       '<filter id="' + g + 'soft"><feGaussianBlur stdDeviation="1.6"/></filter>' +
       '</defs>';
-    var P = [
-      { bx: 20, x: 10, y: -380, s: .7, state: 0, d: .9, w: 2.4, a: 2 },
-      { bx: 40, x: -6, y: -300, s: 1.05, state: 1, d: .2, a: 1.2 },
-      { bx: 96, x: 30, y: -200, s: .78, state: .45, d: .5, rot: 8, a: 1.8 },
-      { bx: 140, x: 50, y: -120, s: .6, state: 0, d: 1.1, w: 2.2, rot: 14, a: 2.2 },
-      { bx: 70, x: 70, y: -150, pad: [74, 26], rot: -6, d: .3, shade: true, a: 1 },
-      { bx: 10, x: 18, y: -210, pad: [60, 22], rot: 10, curl: true, d: .6, a: 1.3 },
-      { bx: 120, x: 110, y: -60, pad: [86, 28], rot: -4, d: .1, curl: true, a: .8 },
-      { bx: 0, x: 30, y: -40, pad: [64, 22], rot: 6, shade: true, d: 0, a: .6 }
-    ];
-    var body = P.map(function (s) { return plant(g, s); }).join('');
-    return '<svg class="lg lg--' + side + '" viewBox="-60 0 340 480" preserveAspectRatio="xMinYMax meet" xmlns="' + NS + '" aria-hidden="true">' + defs +
-      '<g' + (side === 'r' ? ' transform="translate(220 0) scale(-1 1)"' : '') + '>' + body + '</g></svg>';
+    // tips spread from the bottom to the very top, alternating sides of the column
+    var n = Math.max(6, Math.round(H / 118)), P = [];
+    var kinds = ['pad', 'bloom', 'pad', 'bud', 'pad', 'half', 'pad', 'bloom', 'bud'];
+    for (var i = 0; i < n; i++) {
+      var frac = (i + .6) / n, r1 = rnd(i + 1), r2 = rnd(i + 7);
+      var tipY = -(H * frac * .97 + (r1 - .5) * 30), tipX = (i % 2 ? 92 : 38) + (r2 - .5) * 34;
+      var bx = 6 + (i % 3) * 14 + r1 * 10, kind = kinds[i % kinds.length];
+      if (i === n - 1) { kind = 'bloom'; tipY = -(H - 64); tipX = 62; }    // a full lotus crowns the top
+      var spec = { bx: Math.round(bx), x: Math.round(tipX - bx), y: Math.round(tipY), d: +(.15 + frac * 2.4).toFixed(2), sw: (5 + r2 * 3).toFixed(1), a: (1.1 / (1 + frac * 2.5)).toFixed(2), w: 2.6 };
+      if (kind === 'pad') { spec.pad = [42 + r2 * 16, 15 + r1 * 5]; spec.rot = (i % 2 ? -1 : 1) * (6 + r1 * 8); spec.curl = r2 > .5; spec.shade = r1 > .55; spec.w = 2.2; }
+      else if (kind === 'bud') { spec.state = 0; spec.s = .62 + r1 * .1; spec.rot = (i % 2 ? 6 : -6); spec.w = 2.2; }
+      else { spec.state = kind === 'half' ? .45 : 1; spec.s = (kind === 'half' ? .66 : .74) + r2 * .08; spec.rot = (i % 2 ? 5 : -5); }
+      P.push(spec);
+    }
+    // a few big pads at the waterline
+    P.unshift({ bx: 0, x: 34, y: -26, pad: [60, 20], rot: 5, shade: true, d: 0, sw: 7, a: .4, w: 2.4 },
+              { bx: 60, x: 96, y: -12, pad: [70, 22], rot: -4, curl: true, d: .05, sw: 8, a: .3, w: 2.4 });
+    // draw back to front: pads first, flowers last
+    P.sort(function (p, q) { return (p.pad ? 0 : 1) - (q.pad ? 0 : 1); });
+    var body = P.map(function (s) { return plant(g, s, H); }).join('');
+    return '<svg class="lg lg--' + side + '" viewBox="-30 0 190 ' + H + '" preserveAspectRatio="xMinYMax meet" xmlns="' + NS + '" aria-hidden="true">' + defs +
+      '<g' + (side === 'r' ? ' transform="translate(130 0) scale(-1 1)"' : '') + '>' + body + '</g></svg>';
   }
 
   window.SELECT_FX = { garden: garden, waxSeal: waxSeal, petalShower: petalShower, eventIcon: eventIcon, icons: Object.keys(ICONS) };

@@ -46,8 +46,18 @@
   var lotusGarden = art.florals !== false && art.decor !== 'sage' && window.SELECT_FX;
   if (lotusGarden) {
     document.documentElement.classList.add('decor-lotus');
-    var gd = document.createElement('div'); gd.className = 'garden'; gd.innerHTML = window.SELECT_FX.garden('l') + window.SELECT_FX.garden('r');
-    document.body.appendChild(gd);
+    var gd = document.createElement('div'); gd.className = 'garden'; document.body.appendChild(gd);
+    var lastH = 0;
+    var buildGarden = function () {
+      var wpx = parseFloat(getComputedStyle(gd).getPropertyValue('--lgw')) || 0;
+      var probe = document.createElement('div'); probe.style.cssText = 'position:fixed;width:var(--lgw);height:0'; document.body.appendChild(probe);
+      wpx = probe.getBoundingClientRect().width || 160; probe.remove();
+      var H = Math.round(190 * (window.innerHeight + 4) / wpx);
+      if (Math.abs(H - lastH) < 40) return; lastH = H;
+      gd.innerHTML = window.SELECT_FX.garden('l', H) + window.SELECT_FX.garden('r', H);
+    };
+    buildGarden();
+    var rz; window.addEventListener('resize', function () { clearTimeout(rz); rz = setTimeout(buildGarden, 250); });
   }
   if (art.venue) { $('#artImg').src = art.venue; $('#artImg').alt = 'Watercolour of ' + (W.venue && W.venue.name || 'the venue'); }
   else $('#art').hidden = true;

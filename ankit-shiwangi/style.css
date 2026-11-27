@@ -227,7 +227,8 @@ main>.hero,main>.foot{z-index:auto}
 
 /* ---------- growing lotus garden (decor: lotus) ---------- */
 .garden{position:fixed;left:0;right:0;bottom:0;height:0;z-index:2;pointer-events:none}
-.lg{position:fixed;bottom:-4px;width:clamp(150px,26vw,360px);height:auto;aspect-ratio:340/480;overflow:visible;filter:drop-shadow(0 6px 10px rgba(120,60,70,.12))}
+.lg{position:fixed;bottom:-4px;width:var(--lgw);height:calc(100vh + 4px);overflow:visible;filter:drop-shadow(0 6px 10px rgba(120,60,70,.12))}
+:root{--lgw:clamp(130px,17vw,240px)}
 .lg--l{left:-1vw}.lg--r{right:-1vw}
 .lg *{transform-box:view-box}
 .lg-plant,.lg-pt,.lg-leaf,.lg-flower{transform-origin:0 0}
@@ -235,22 +236,24 @@ main>.hero,main>.foot{z-index:auto}
 .lg-leaf{transform:scale(0)}
 .lg-flower{transform:scale(.05)}
 .lg-pt{transform:rotate(var(--r0))}
-.grow .lg-stem{animation:lgDraw 1.8s cubic-bezier(.3,.6,.3,1) var(--d) forwards}
+.grow .lg-stem{animation:lgDraw var(--dur) cubic-bezier(.3,.6,.3,1) var(--d) forwards}
 .grow .lg-leaf{animation:lgPop 1.6s cubic-bezier(.2,.9,.25,1.08) var(--d) forwards}
 .grow .lg-flower{animation:lgPop 1.4s cubic-bezier(.2,.9,.25,1) var(--d) forwards}
 .grow .lg-flower .lg-pt{animation:lgOpen 2.6s ease-out calc(var(--d) + .5s) forwards}
-.grow .lg-plant{animation:lgSway var(--sw) ease-in-out calc(var(--d) + 2.6s) infinite alternate}
+.grow .lg-plant{animation:lgSway var(--sw) ease-in-out calc(var(--d) + 3.4s) infinite alternate}
 @keyframes lgDraw{to{stroke-dashoffset:0}}
 @keyframes lgPop{to{transform:scale(1)}}
 @keyframes lgOpen{to{transform:rotate(var(--r))}}
 @keyframes lgSway{from{transform:rotate(calc(var(--a) * -1))}to{transform:rotate(var(--a))}}
 .decor-lotus .hero .fl--tl,.decor-lotus .hero .fl--tr,.decor-lotus .opening .fl--tl,.decor-lotus .opening .fl--tr,.decor-lotus .foot .fl,.decor-lotus .opening .fl{display:none}
 .decor-lotus main::before,.decor-lotus main::after{display:none}
-.decor-lotus .foot{padding-bottom:clamp(220px,34vw,460px)}
+.decor-lotus .foot{padding-bottom:80px}
+@media (min-width:641px){.decor-lotus .sec,.decor-lotus .hero{padding-left:calc(var(--lgw) * .6);padding-right:calc(var(--lgw) * .6)}}
 .opening{z-index:50}.garden{z-index:60}
 @media (max-width:640px){
-  .lg{width:118px}
-  .decor-lotus .sec{padding-left:24px;padding-right:24px}
+  :root{--lgw:66px}
+  .decor-lotus .sec,.decor-lotus .hero,.decor-lotus .foot{padding-left:54px;padding-right:54px}
+  .decor-lotus .art{margin-left:-54px;margin-right:-54px}
 }
 @media (prefers-reduced-motion:reduce){
   .lg-stem{stroke-dashoffset:0}.lg-leaf,.lg-flower{transform:none}.lg-pt{transform:rotate(var(--r))}
