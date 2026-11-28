@@ -342,6 +342,20 @@
       cvs.setAttribute('aria-label', 'Outfit inspiration for ' + (wd.event || 'the wedding'));
       clearTimeout(tm); figBox.classList.add('busy');
       tm = setTimeout(function () {
+        if (wd.image) { // a finished illustration for this event: shown as it is, no recolouring
+          var im = new Image();
+          im.onload = function () {
+            cvs.width = im.naturalWidth; cvs.height = im.naturalHeight; var cx = cvs.getContext('2d'); cx.drawImage(im, 0, 0);
+            try { // let the white paper background melt into the page
+              var d = cx.getImageData(0, 0, cvs.width, cvs.height), px = d.data;
+              for (var q = 0; q < px.length; q += 4) { var m = Math.min(px[q], px[q + 1], px[q + 2]); if (m > 228) px[q + 3] = Math.round(255 * Math.max(0, (255 - m) / 27)); }
+              cx.putImageData(d, 0, 0);
+            } catch (e) {}
+            figBox.classList.remove('busy');
+          };
+          im.onerror = function () { figBox.classList.remove('busy'); };
+          im.src = wd.image; return;
+        }
         FX.dressUp(dir, outfitsFor(pals[featured])).then(function (d) { cvs.width = d.width; cvs.height = d.height; cvs.getContext('2d').putImageData(d, 0, 0); figBox.classList.remove('busy'); }).catch(function () { figBox.classList.remove('busy'); });
       }, 60);
     }

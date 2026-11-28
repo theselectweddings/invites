@@ -87,6 +87,7 @@ window.WEDDING = {
      Marigold, Turmeric, Lemon, Mint, Pistachio, Emerald, Bottle Green, Powder Blue, Royal Blue, Navy, Lilac, Purple,
      Wine, Maroon, Red, Black) or any colour code like "#C2185B".
      feature: true = the illustrated models wear this event's palette (colour 1 lehenga, 2 gown, 3 sherwani, 4 blazer & turban).
+     image: "images/wardrobe-wedding.jpg" = use a finished illustration for this event as it is (no recolouring).
      Every other event shows its palette as colour swatches.                                                   */
   wardrobe: [
     { event: "Mehndi Lunch", when: "14th February", theme: "Garden greens", note: "Fresh greens with a pop of pink.",

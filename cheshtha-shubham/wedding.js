@@ -115,8 +115,8 @@ window.WEDDING = {
       palette: ["Black", "Navy", "Emerald", "Silver"] },
     { event: "Haldi Brunch", when: "1st March", theme: "Sunshine yellows", note: "Turmeric, marigold and soft peach.",
       palette: ["Turmeric", "Peach", "Ivory", "Marigold"] },
-    { event: "Wedding Ceremony", when: "1st March", theme: "Royal jewel tones", note: "Rich jewel tones with gold.",
-      palette: ["Maroon", "Royal Blue", "Emerald", "Purple"], feature: true }
+    { event: "Wedding Ceremony", when: "1st March", theme: "Wine, blush & emerald", note: "Rich wine and soft blush with a touch of deep green.",
+      palette: ["Maroon", "Blush", "Bottle Green", "Ivory"], feature: true, image: "images/wardrobe-wedding.jpg" }
   ],
 
   /* ---------- Venue ----------
