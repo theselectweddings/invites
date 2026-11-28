@@ -60,6 +60,9 @@
       ink: ink, muted: mixHex(ink, bg, .42), btnInk: '#FFFDF8', hi: '#FFFFFF' };
   }
   var bgName = (W.theme || {}).background || '';
+  var doorName = (W.theme || {}).doorColor || '';
+  function setDoor() { var c = doorColour(); document.documentElement.style.setProperty('--door-paper', c); document.documentElement.classList.toggle('door-dark', lumOf(c) < .45); }
+  function doorColour() { var d = doorName && bgScheme(doorName); if (d) return d.paper; var b = bgScheme(bgName); return b ? b.paper : '#F2E9DC'; }
 
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
@@ -100,7 +103,7 @@
     r.setProperty('--btn-ink', p.btnInk);
     r.setProperty('--hi', p.hi || '#FFFFFF');
     document.documentElement.classList.toggle('bg-dark', !!p.dark);
-    if (bgName && p.paper) r.setProperty('--door-paper', p.paper); else if (typeof PACK !== 'undefined' && PACK) r.setProperty('--door-paper', PACK.paper || '#FFFFFF');
+    setDoor();
   }
   applyPalette();
   var ICON_COLOURS = { ink: ['Ink', 'var(--ink)'], theme: ['Theme colour', 'var(--gold)'], gold: ['Gold', '#B08A3E'], sage: ['Sage', '#6F8A4A'], rose: ['Rose', '#C2456A'] };
@@ -152,6 +155,25 @@
     if (typeof v === 'string' && v) { n.textContent = v; n.hidden = false; }
     else if (n.matches('.blessing,.opening__dear,.welcome,.rsvp__intro,.venue__addr,.caps--lede')) n.hidden = true;
   });
+  // the couple's names on the ribbon, either side of the seal (standard on every invite)
+  (function () {
+    if (W.ribbonNames === false) return;
+    [['.gf-ribbon--l', W.couple.first], ['.gf-ribbon--r', W.couple.second]].forEach(function (x) {
+      var rb = $(x[0]); if (!rb || !x[1]) return;
+      var n = el('span', 'gf-name', x[1]); rb.appendChild(n);
+    });
+    // shrink a long name so it always fits between the screen edge and the seal
+    function fit() {
+      $$('.gf-name').forEach(function (n) {
+        n.style.fontSize = ''; var cs = getComputedStyle(n), rb = n.parentNode;
+        var room = rb.getBoundingClientRect().width - parseFloat(n.parentNode.classList.contains('gf-ribbon--l') ? cs.right : cs.left) - 12;
+        var fs = parseFloat(cs.fontSize);
+        while (n.getBoundingClientRect().width > room && fs > 14) { fs -= 1; n.style.fontSize = fs + 'px'; }
+      });
+    }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit); else setTimeout(fit, 500);
+    window.addEventListener('resize', fit);
+  })();
   document.title = W.couple.first + ' & ' + W.couple.second + (W.dates && W.dates.display ? ' · ' + W.dates.display : '');
   Object.keys(show).forEach(function (k) { if (show[k] === false) { var s = document.getElementById(k); if (s) s.hidden = true; } });
 
@@ -160,25 +182,26 @@
   /* handmade paper texture for the gatefold, drawn once */
   (function () {
     var cv = document.createElement('canvas'); cv.width = cv.height = 512; var x = cv.getContext('2d');
-    x.fillStyle = '#F2E9DC'; x.fillRect(0, 0, 512, 512);
+    x.fillStyle = '#808080'; x.fillRect(0, 0, 512, 512);
     var img = x.getImageData(0, 0, 512, 512), d = img.data;
-    for (var i = 0; i < d.length; i += 4) { var n = (Math.random() - .5) * 14; d[i] += n; d[i + 1] += n; d[i + 2] += n * .9; }
+    for (var i = 0; i < d.length; i += 4) { var n = (Math.random() - .5) * 16; d[i] += n; d[i + 1] += n; d[i + 2] += n; }
     x.putImageData(img, 0, 0);
     for (var k = 0; k < 420; k++) {
       var px = Math.random() * 512, py = Math.random() * 512, len = 4 + Math.random() * 16, ang = Math.random() * Math.PI * 2;
-      x.strokeStyle = Math.random() < .55 ? 'rgba(150,120,85,' + (.15 + Math.random() * .25) + ')' : 'rgba(255,255,250,' + (.4 + Math.random() * .4) + ')';
+      x.strokeStyle = Math.random() < .55 ? 'rgba(40,40,40,' + (.12 + Math.random() * .2) + ')' : 'rgba(255,255,255,' + (.3 + Math.random() * .35) + ')';
       x.lineWidth = .5 + Math.random() * .7; x.beginPath(); x.moveTo(px, py);
       x.quadraticCurveTo(px + Math.cos(ang + 1) * len * .5, py + Math.sin(ang + 1) * len * .5, px + Math.cos(ang) * len, py + Math.sin(ang) * len); x.stroke();
     }
-    for (var s = 0; s < 260; s++) { x.fillStyle = 'rgba(120,95,65,' + (.18 + Math.random() * .3) + ')'; x.beginPath(); x.arc(Math.random() * 512, Math.random() * 512, .4 + Math.random() * 1.1, 0, 7); x.fill(); }
+    for (var s = 0; s < 260; s++) { x.fillStyle = 'rgba(40,40,40,' + (.14 + Math.random() * .24) + ')'; x.beginPath(); x.arc(Math.random() * 512, Math.random() * 512, .4 + Math.random() * 1.1, 0, 7); x.fill(); }
     var r = document.documentElement.style;
     r.setProperty('--paper-tex', 'url(' + cv.toDataURL('image/png') + ')');
   })();
   // opening card print: the pack's print, or "lotus" | "sage" | "plain" | "palace" | "beach" | "hillside" | "arabian"
   function applyPack(fromSwitch) {
     var r = document.documentElement.style;
-    var dp = (!fromSwitch && W.art && W.art.doorPrint) || PACK.door || 'lotus';
-    r.setProperty('--door-paper', (bgScheme(bgName) || {}).paper || PACK.paper || '#FFFFFF');
+    // the opening card is clean coloured paper (no lotus or pattern) unless a wedding asks for a print
+    var dp = (!fromSwitch && W.art && W.art.doorPrint) || 'plain';
+    setDoor();
     if (TH && TH.hasTile(dp)) {
       var t = TH.tile(dp, PACK.doorInk || '#8A6A3A', .5);
       r.setProperty('--door-l', t); r.setProperty('--door-r', t); r.setProperty('--door-size', dp === 'arabian' ? '64px' : dp === 'palace' ? '90px' : '130px');
@@ -537,6 +560,14 @@
       b.setAttribute('aria-pressed', String(k === bgName));
       b.addEventListener('click', function () { bgName = k; $$('#bgList button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); $$('#palList button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); }); applyPalette(); });
       $('#bgList').appendChild(b);
+    });
+    ['Same as background'].concat(Object.keys(BACKGROUNDS)).forEach(function (k, i) {
+      var b = el('button', 'studio__bg'); b.type = 'button'; b.title = k;
+      var sw = el('i'); sw.style.background = i ? BACKGROUNDS[k][0] : 'linear-gradient(135deg,#F2E9DC 50%,#5A1520 50%)';
+      b.appendChild(sw); b.appendChild(document.createTextNode(k));
+      b.setAttribute('aria-pressed', String(i ? k === doorName : !doorName));
+      b.addEventListener('click', function () { doorName = i ? k : ''; $$('#doorList button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); setDoor(); if (!opening.classList.contains('open')) return; $('#replayBtn').click(); });
+      $('#doorList').appendChild(b);
     });
     [['theme', 'Match the theme'], ['original', 'Original colours']].forEach(function (o) {
       var b = el('button', '', o[1]); b.type = 'button'; b.setAttribute('aria-pressed', String(o[0] === artCol));

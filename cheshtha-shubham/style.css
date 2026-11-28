@@ -326,7 +326,7 @@ main>.hero,main>.foot{z-index:auto}
 .gf-door{position:absolute;top:0;bottom:0;width:calc(50% + 16px);z-index:1;transition:transform 1.7s cubic-bezier(.55,.05,.3,1) .9s;backface-visibility:hidden;-webkit-backface-visibility:hidden;filter:drop-shadow(0 0 10px rgba(80,58,30,.28))}
 .gf-door--l{left:0;transform-origin:0 50%}
 .gf-door--r{right:0;transform-origin:100% 50%}
-.gf-face{position:absolute;inset:0;background-color:var(--door-paper,#FFFFFF);background-image:var(--door-l),var(--paper-tex);background-size:var(--door-size,clamp(150px,19vw,270px)) auto,512px 512px;background-blend-mode:normal,multiply;background-repeat:repeat,repeat}
+.gf-face{position:absolute;inset:0;background-color:var(--door-paper,#FFFFFF);background-image:var(--door-l),var(--paper-tex);background-size:var(--door-size,clamp(150px,19vw,270px)) auto,512px 512px;background-blend-mode:normal,soft-light;background-repeat:repeat,repeat}
 .gf-door--r .gf-face{background-image:var(--door-r),var(--paper-tex);background-position:right top,0 0}
 .gf-door--l .gf-face{-webkit-mask:linear-gradient(#000 0 0) left/calc(100% - 24px) 100% no-repeat,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 160' preserveAspectRatio='none'%3E%3Cpath d='M0 0H4C26 22 26 58 4 80C26 102 26 138 4 160H0Z'/%3E%3C/svg%3E") right top/24px 160px repeat-y;
   mask:linear-gradient(#000 0 0) left/calc(100% - 24px) 100% no-repeat,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 160' preserveAspectRatio='none'%3E%3Cpath d='M0 0H4C26 22 26 58 4 80C26 102 26 138 4 160H0Z'/%3E%3C/svg%3E") right top/24px 160px repeat-y}
@@ -376,3 +376,12 @@ main>.hero,main>.foot{z-index:auto}
 .studio__bg i{flex:none;width:20px;height:20px;border-radius:50%;border:1px solid rgba(0,0,0,.15)}
 /* dark backgrounds: soften the paper grain, keep images bright */
 .bg-dark body::before{opacity:.35;mix-blend-mode:soft-light}
+
+/* couple's names on the ribbon */
+.gf-name{position:absolute;top:50%;transform:translateY(-46%);font:400 clamp(25px,3vw,38px)/1 var(--script);color:#8A6A2C;white-space:nowrap;letter-spacing:.01em;
+  text-shadow:0 1px 0 rgba(255,255,255,.75),0 -1px 0 rgba(90,60,20,.18);pointer-events:none}
+.gf{--seal-half:clamp(52px,13.5vw,72px)}
+.gf-ribbon--l .gf-name{right:calc(var(--seal-half) + 16px)}
+.gf-ribbon--r .gf-name{left:calc(var(--seal-half) + 16px)}
+/* hint text readable on dark opening cards */
+.door-dark .gf-hint{color:rgba(255,245,228,.78)}
