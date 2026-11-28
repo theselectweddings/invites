@@ -357,8 +357,10 @@
     figBox.appendChild(cvs);
     var figTitle = el('div', 'wfeature__txt');
     figCard.appendChild(figBox); figCard.appendChild(figTitle);
-    var rows = el('div', 'wpals' + (list.some(function (w, i) { return w.image; }) ? ' wpals--art' : ''));
-    wrap.appendChild(figCard); wrap.appendChild(rows);
+    // every event has its own picture: show them all in event order, no separate big picture on top
+    var artMode = list.every(function (w) { return w.image; });
+    var rows = el('div', 'wpals' + (artMode ? ' wpals--art' : ''));
+    if (!artMode) wrap.appendChild(figCard); wrap.appendChild(rows);
     function outfitsFor(p) { return { lehenga: p[0], gown: p[1] || p[0], sherwani: p[2] || p[0], blazer: p[3] || p[1] || p[0] }; }
     function swatchList(p) {
       var ul = el('ul', 'wcard__sw');
@@ -396,11 +398,11 @@
     function drawRows() {
       rows.innerHTML = '';
       list.forEach(function (wd, idx) {
-        if (idx === featured && !W.preview) return;
-        var r = el('div', 'wpal' + (idx === featured ? ' wpal--feat' : ''));
+        if (idx === featured && !W.preview && !artMode) return;
+        var r = el('div', 'wpal' + (idx === featured && !artMode ? ' wpal--feat' : ''));
         r.appendChild(el('p', 'wcard__event', [wd.event, wd.when].filter(Boolean).join(' · ')));
         if (wd.theme) r.appendChild(el('h3', 'wcard__theme', wd.theme));
-        if (wd.image && idx !== featured) { var pic = el('img', 'wpal__img'); pic.src = wd.image; pic.alt = 'Outfit inspiration for ' + (wd.event || 'this event'); pic.loading = 'lazy'; r.appendChild(pic); }
+        if (wd.image && (idx !== featured || artMode)) { var pic = el('img', 'wpal__img'); pic.src = wd.image; pic.alt = 'Outfit inspiration for ' + (wd.event || 'this event'); pic.loading = 'lazy'; r.appendChild(pic); }
         var big = el('div', 'wpal__dots');
         pals[idx].forEach(function (c) { if (!c) return; var d = el('span'); d.style.background = FX.hexOf(c); d.title = c; big.appendChild(d); });
         r.appendChild(big);
@@ -441,7 +443,7 @@
     function update(idx) {
       if (idx === featured) drawFeature();
       var rowsEls = rows.children, pos = 0;
-      for (var i = 0; i < list.length; i++) { if (i === featured && !W.preview) continue; if (i === idx) break; pos++; }
+      for (var i = 0; i < list.length; i++) { if (i === featured && !W.preview && !artMode) continue; if (i === idx) break; pos++; }
       var r = rowsEls[pos]; if (!r) return;
       var big = r.querySelector('.wpal__dots'); big.innerHTML = '';
       pals[idx].forEach(function (c) { if (!c) return; var d = el('span'); d.style.background = FX.hexOf(c); d.title = c; big.appendChild(d); });
