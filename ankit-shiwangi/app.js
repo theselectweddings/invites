@@ -30,6 +30,37 @@
     champagnePearl:{ label: 'Champagne & Pearl', paper: '#FCFAF6', paper2: '#EDE6DB', gold: '#9C7F57', line: '#E0CBAF', sage: '#C9B08C', ink: '#4A3F33', muted: '#857A6C', btnInk: '#FCFAF6' }
   };
 
+  /* Background colours: the whole invite takes this colour and the text, lines and buttons adapt to it.
+     theme.background: one of these names (or any colour code). Leave "" to use the palette. */
+  var BACKGROUNDS = {
+    'Ivory': ['#FBF6EC', '#A8843E'], 'Beige': ['#EFE4D2', '#9C7642'], 'Champagne': ['#F2E4CC', '#A87F3C'],
+    'Blush': ['#FBEAE6', '#B85C6E'], 'Pastel Pink': ['#F8DCE2', '#B04A68'], 'Peach': ['#FADFCF', '#B9603F'],
+    'Lemon': ['#FAF1CC', '#9A7A1E'], 'Mint': ['#DFF1E6', '#3E8063'], 'Sage': ['#E2E9D8', '#5F7A45'],
+    'Powder Blue': ['#DFEAF4', '#3F6A96'], 'Lavender': ['#EAE3F4', '#6E58A0'], 'Lilac': ['#EEDDEC', '#8E4F86'],
+    'Dove Grey': ['#EAE7E2', '#6E665D'],
+    'Terracotta': ['#8E4330', '#F1D29A'], 'Maroon': ['#5A1520', '#DDBB72'], 'Wine': ['#46122A', '#D9B26E'],
+    'Plum': ['#3F1F3C', '#DAB878'], 'Emerald': ['#0E4A38', '#D7B76A'], 'Bottle Green': ['#1D3A2A', '#D2B46C'],
+    'Teal': ['#11464A', '#D9BE7A'], 'Royal Blue': ['#22336A', '#E0C17E'], 'Navy': ['#18263F', '#D9BC7A'],
+    'Chocolate': ['#3A2820', '#D8B676'], 'Charcoal': ['#262423', '#D3B170'], 'Black': ['#121112', '#D4B068']
+  };
+  function mixHex(a, b, t) {
+    var x = parseInt(a.slice(1), 16), y = parseInt(b.slice(1), 16);
+    var c = [16, 8, 0].map(function (sh) { var u = (x >> sh) & 255, v = (y >> sh) & 255; return Math.round(u + (v - u) * t); });
+    return '#' + c.map(function (n) { return ('0' + n.toString(16)).slice(-2); }).join('').toUpperCase();
+  }
+  function lumOf(h) { var n = parseInt(h.slice(1), 16); return (.299 * (n >> 16) + .587 * ((n >> 8) & 255) + .114 * (n & 255)) / 255; }
+  function bgScheme(name) {
+    var e = BACKGROUNDS[name] || (/^#[0-9a-f]{6}$/i.test(name || '') ? [name, lumOf(name) < .45 ? '#D8B56A' : '#9C7642'] : null);
+    if (!e) return null;
+    var bg = e[0].toUpperCase(), ac = e[1], dark = lumOf(bg) < .45;
+    if (dark) return { label: name, dark: true, paper: bg, paper2: mixHex(bg, ac, .07), gold: ac, line: mixHex(bg, ac, .42), sage: '#A9BF86',
+      ink: '#F7EEDF', muted: mixHex('#F7EEDF', bg, .3), btnInk: bg, hi: mixHex(bg, '#FFFFFF', .07) };
+    var ink = mixHex('#211A18', ac, .18);
+    return { label: name, dark: false, paper: bg, paper2: mixHex(bg, ac, .1), gold: ac, line: mixHex(bg, ac, .35), sage: '#7E9A5A',
+      ink: ink, muted: mixHex(ink, bg, .42), btnInk: '#FFFDF8', hi: '#FFFFFF' };
+  }
+  var bgName = (W.theme || {}).background || '';
+
   var $ = function (s, r) { return (r || document).querySelector(s); };
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -59,14 +90,17 @@
   document.body.appendChild(tintSvg);
   function hexRGB(h) { var n = parseInt(h.slice(1), 16); return [(n >> 16) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255]; }
   function tintFromPalette(p) {
-    var stops = [p.ink, p.gold, p.line, '#FFFDFA'].map(hexRGB);
+    var stops = [p.ink, p.gold, p.line, p.dark ? p.paper : '#FFFDFA'].map(hexRGB);
     ['R', 'G', 'B'].forEach(function (c, i) { tintSvg.querySelector('feFunc' + c).setAttribute('tableValues', stops.map(function (s) { return s[i].toFixed(3); }).join(' ')); });
   }
   function applyPalette() {
-    var p = PALETTES[pal], r = document.documentElement.style;
+    var p = bgScheme(bgName) || PALETTES[pal], r = document.documentElement.style;
     tintFromPalette(p);
     ['paper', 'paper2', 'gold', 'line', 'sage', 'ink', 'muted'].forEach(function (k) { r.setProperty('--' + k, p[k]); });
     r.setProperty('--btn-ink', p.btnInk);
+    r.setProperty('--hi', p.hi || '#FFFFFF');
+    document.documentElement.classList.toggle('bg-dark', !!p.dark);
+    if (bgName && p.paper) r.setProperty('--door-paper', p.paper); else if (typeof PACK !== 'undefined' && PACK) r.setProperty('--door-paper', PACK.paper || '#FFFFFF');
   }
   applyPalette();
   var ICON_COLOURS = { ink: ['Ink', 'var(--ink)'], theme: ['Theme colour', 'var(--gold)'], gold: ['Gold', '#B08A3E'], sage: ['Sage', '#6F8A4A'], rose: ['Rose', '#C2456A'] };
@@ -144,7 +178,7 @@
   function applyPack(fromSwitch) {
     var r = document.documentElement.style;
     var dp = (!fromSwitch && W.art && W.art.doorPrint) || PACK.door || 'lotus';
-    r.setProperty('--door-paper', PACK.paper || '#FFFFFF');
+    r.setProperty('--door-paper', (bgScheme(bgName) || {}).paper || PACK.paper || '#FFFFFF');
     if (TH && TH.hasTile(dp)) {
       var t = TH.tile(dp, PACK.doorInk || '#8A6A3A', .5);
       r.setProperty('--door-l', t); r.setProperty('--door-r', t); r.setProperty('--door-size', dp === 'arabian' ? '64px' : dp === 'palace' ? '90px' : '130px');
@@ -346,7 +380,7 @@
           var im = new Image();
           im.onload = function () {
             cvs.width = im.naturalWidth; cvs.height = im.naturalHeight; var cx = cvs.getContext('2d'); cx.drawImage(im, 0, 0);
-            try { // let the white paper background melt into the page
+            if (!/\.png($|\?)/i.test(wd.image)) try { // a JPG: let the white paper background melt into the page (PNGs already have it cut out)
               var d = cx.getImageData(0, 0, cvs.width, cvs.height), px = d.data;
               for (var q = 0; q < px.length; q += 4) { var m = Math.min(px[q], px[q + 1], px[q + 2]); if (m > 228) px[q + 3] = Math.round(255 * Math.max(0, (255 - m) / 27)); }
               cx.putImageData(d, 0, 0);
@@ -491,8 +525,16 @@
       [p.paper, p.gold, p.sage].forEach(function (c) { var i = el('i'); i.style.background = c; sw.appendChild(i); });
       b.appendChild(sw); b.appendChild(document.createTextNode(p.label));
       b.setAttribute('aria-pressed', String(k === pal)); b.setAttribute('data-pal', k);
-      b.addEventListener('click', function () { pal = k; $$('#palList button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); applyPalette(); });
+      b.addEventListener('click', function () { pal = k; bgName = ''; $$('#bgList button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); }); $$('#palList button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); applyPalette(); });
       $('#palList').appendChild(b);
+    });
+    Object.keys(BACKGROUNDS).forEach(function (k) {
+      var b = el('button', 'studio__bg'); b.type = 'button'; b.title = k;
+      var sw = el('i'); sw.style.background = BACKGROUNDS[k][0]; sw.style.boxShadow = 'inset 0 0 0 3px ' + BACKGROUNDS[k][0] + ', inset 0 0 0 5px ' + BACKGROUNDS[k][1];
+      b.appendChild(sw); b.appendChild(document.createTextNode(k));
+      b.setAttribute('aria-pressed', String(k === bgName));
+      b.addEventListener('click', function () { bgName = k; $$('#bgList button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); }); $$('#palList button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); }); applyPalette(); });
+      $('#bgList').appendChild(b);
     });
     [['theme', 'Match the theme'], ['original', 'Original colours']].forEach(function (o) {
       var b = el('button', '', o[1]); b.type = 'button'; b.setAttribute('aria-pressed', String(o[0] === artCol));

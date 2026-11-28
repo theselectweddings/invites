@@ -15,7 +15,7 @@
 html{scroll-behavior:smooth;background:var(--paper);scroll-padding-top:20px}
 body{margin:0;color:var(--ink);font:400 19px/1.6 var(--serif);font-feature-settings:"lnum" 1;-webkit-font-smoothing:antialiased;overflow-x:clip;
   background:
-    radial-gradient(120% 60% at 50% 0%,color-mix(in srgb,var(--paper) 60%,#fff) 0%,transparent 60%),
+    radial-gradient(120% 60% at 50% 0%,color-mix(in srgb,var(--paper) 60%,var(--hi,#fff)) 0%,transparent 60%),
     radial-gradient(90% 50% at 50% 100%,var(--paper2) 0%,transparent 70%),
     var(--paper)}
 body.locked{overflow:hidden;height:100vh}
@@ -82,7 +82,7 @@ main,.opening{position:relative;z-index:1}
 .opening.open .seal{transform:scale(1.15);transition:transform .6s ease}
 @keyframes breathe{50%{opacity:.35}}
 
-.music{position:fixed;right:16px;bottom:16px;z-index:40;width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:color-mix(in srgb,var(--paper) 92%,#fff);color:var(--gold);display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px -8px rgba(80,60,20,.45)}
+.music{position:fixed;right:16px;bottom:16px;z-index:40;width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:color-mix(in srgb,var(--paper) 92%,var(--hi,#fff));color:var(--gold);display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 18px -8px rgba(80,60,20,.45)}
 .music svg{width:22px;height:22px;animation:spinNote 6s linear infinite}
 .music.off svg{animation:none;opacity:.45}
 .music.off::after{content:"";position:absolute;width:26px;height:1.5px;background:var(--gold);transform:rotate(-45deg)}
@@ -141,7 +141,7 @@ main,.opening{position:relative;z-index:1}
 .notes{list-style:none;padding:0;margin:18px auto 28px;max-width:560px}
 .notes li{margin:0 0 8px;font-size:18px}
 
-.gal{position:relative;max-width:820px;margin:0 auto;border:1px solid var(--line);padding:8px;background:color-mix(in srgb,var(--paper) 70%,#fff)}
+.gal{position:relative;max-width:820px;margin:0 auto;border:1px solid var(--line);padding:8px;background:color-mix(in srgb,var(--paper) 70%,var(--hi,#fff))}
 .gal__track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;aspect-ratio:3/2}
 .gal__track::-webkit-scrollbar{display:none}
 .gal__track img{flex:0 0 100%;width:100%;height:100%;object-fit:cover;scroll-snap-align:start}
@@ -264,7 +264,7 @@ main>.hero,main>.foot{z-index:auto}
 .seal{width:clamp(170px,40vw,220px)}
 
 /* ---------- scratch-to-reveal date ---------- */
-.scratch{position:relative;width:min(360px,100%);aspect-ratio:1.5;margin:0 auto;border:1px solid var(--line);background:color-mix(in srgb,var(--paper) 55%,#fff);
+.scratch{position:relative;width:min(360px,100%);aspect-ratio:1.5;margin:0 auto;border:1px solid var(--line);background:color-mix(in srgb,var(--paper) 55%,var(--hi,#fff));
   box-shadow:0 18px 40px -22px rgba(90,40,50,.35);touch-action:none;overflow:hidden}
 .scratch::before{content:"";position:absolute;inset:8px;border:1px solid color-mix(in srgb,var(--line) 70%,transparent);pointer-events:none}
 .scratch__date{position:absolute;inset:0;display:grid;place-content:center;gap:2px;text-align:center}
@@ -300,7 +300,7 @@ main>.hero,main>.foot{z-index:auto}
 .wcard__sw li{display:inline-flex;align-items:center;gap:7px;font:500 13px/1.4 var(--serif);letter-spacing:.12em;text-transform:uppercase;color:var(--ink)}
 .wcard__sw i{width:16px;height:16px;border-radius:50%;border:1px solid rgba(0,0,0,.12);box-shadow:inset 0 -2px 3px rgba(0,0,0,.12)}
 .wcard__note{font:italic 400 17px/1.5 var(--serif);color:var(--muted);margin:10px auto 0;max-width:340px}
-.wcard__edit{margin:16px auto 0;max-width:340px;padding:14px;border:1px dashed var(--line);border-radius:12px;text-align:left;font-family:system-ui,sans-serif;background:color-mix(in srgb,var(--paper) 70%,#fff)}
+.wcard__edit{margin:16px auto 0;max-width:340px;padding:14px;border:1px dashed var(--line);border-radius:12px;text-align:left;font-family:system-ui,sans-serif;background:color-mix(in srgb,var(--paper) 70%,var(--hi,#fff))}
 .wcard__edit-h{margin:0 0 8px;font:600 11px/1 system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#888}
 .wrow{display:grid;grid-template-columns:110px 1fr auto;align-items:center;gap:8px;margin:0 0 6px;font:400 13px system-ui,sans-serif;color:#333}
 .wrow select{min-height:34px;border:1px solid #ddd;border-radius:8px;background:#fff;font:400 14px system-ui,sans-serif;padding:0 6px}
@@ -343,7 +343,7 @@ main>.hero,main>.foot{z-index:auto}
 .gf-bow{position:absolute;left:50%;top:50%;width:clamp(250px,30vw,380px);height:auto;transform:translate(-50%,-44%);z-index:3;transition:transform .7s cubic-bezier(.5,0,.5,1) .25s,opacity .5s .4s}
 .gf-centre{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;text-align:center}
 .gf .seal{margin:0;width:clamp(130px,34vw,170px);transition:transform .55s cubic-bezier(.5,-.3,.5,1),opacity .45s .15s}
-.gf .opening__dear{position:absolute;left:50%;bottom:calc(100% + 64px);transform:translateX(-50%);white-space:nowrap;margin:0;padding:6px 16px;border-radius:999px;background:rgba(251,246,238,.9);color:var(--ink);font-size:17px}
+.gf .opening__dear{position:absolute;left:50%;bottom:calc(100% + 64px);transform:translateX(-50%);white-space:nowrap;margin:0;padding:6px 16px;border-radius:999px;background:color-mix(in srgb,var(--paper) 90%,transparent);color:var(--ink);font-size:17px}
 .gf-hint{position:absolute;left:0;right:0;bottom:max(28px,6vh);z-index:4;text-align:center;font-size:12px;color:#6D5B44;animation:breathe 2.6s ease-in-out infinite;transition:opacity .4s}
 /* opening sequence */
 .gf.open .seal{transform:translateY(-40px) scale(.55);opacity:0}
@@ -369,3 +369,10 @@ main>.hero,main>.foot{z-index:auto}
 .wpal__img{display:block;width:100%;max-width:720px;height:auto;margin:14px auto 6px}
 /* opening card: the seal alone, no bow */
 .gf-bow{display:none}
+
+/* background colour chooser (preview) */
+.studio__row--bg{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:6px}
+.studio__row--bg button{min-height:36px;font-size:13px;padding:4px 8px}
+.studio__bg i{flex:none;width:20px;height:20px;border-radius:50%;border:1px solid rgba(0,0,0,.15)}
+/* dark backgrounds: soften the paper grain, keep images bright */
+.bg-dark body::before{opacity:.35;mix-blend-mode:soft-light}

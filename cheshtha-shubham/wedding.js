@@ -17,7 +17,7 @@ window.WEDDING = {
      art.florals: true shows the sage floral corners and side borders
      Each event gets a small drawn emblem chosen from its name (mandap, mehndi hand, haldi bowl, rings, dhol, cocktail, diya, dinner).
      To choose one yourself, add icon: "mandap" | "mehndi" | "haldi" | "rings" | "dhol" | "cocktail" | "diya" | "dinner" | "lotus" to the event.                                   */
-  theme: { pack: "lotus", palette: "", wax: "", sealImage: "images/seal.png", iconColor: "theme", artColor: "theme" },   // pack: the design theme — "lotus" | "palace" | "beach" | "hillside" | "arabian" (sets the graphics, patterns, petals and a matching palette) · palette: leave "" to use the theme's own · sealImage: the gold seal with the couple's initials — always "images/seal.png", made with tools/make_seal.py (the seal design never changes, only the initials) · iconColor: event emblem colour — "ink", "theme", "gold", "sage", "rose" or a colour code
+  theme: { background: "", pack: "lotus", palette: "", wax: "", sealImage: "images/seal.png", iconColor: "theme", artColor: "theme" },   // background: the colour of the whole invite — "Ivory" | "Beige" | "Champagne" | "Blush" | "Pastel Pink" | "Peach" | "Lemon" | "Mint" | "Sage" | "Powder Blue" | "Lavender" | "Lilac" | "Dove Grey" | "Terracotta" | "Maroon" | "Wine" | "Plum" | "Emerald" | "Bottle Green" | "Teal" | "Royal Blue" | "Navy" | "Chocolate" | "Charcoal" | "Black" (text adapts automatically; "" = use the palette) · pack: the design theme — "lotus" | "palace" | "beach" | "hillside" | "arabian" (sets the graphics, patterns, petals and a matching palette) · palette: leave "" to use the theme's own · sealImage: the gold seal with the couple's initials — always "images/seal.png", made with tools/make_seal.py (the seal design never changes, only the initials) · iconColor: event emblem colour — "ink", "theme", "gold", "sage", "rose" or a colour code
   art: { venue: "", florals: true, decor: "", events: true, doorPrint: "" },   // doorPrint: leave "" for the theme's own print, or "lotus" | "plain" | "sage" | "palace" | "beach" | "hillside" | "arabian" · decor: leave "" for the theme's growing border, or "sage" (florals: false = none) · pattern: false hides the faint background pattern
 
   /* true = shows the colour switcher (for The Select only). Set false before sharing with guests. */
@@ -116,7 +116,7 @@ window.WEDDING = {
     { event: "Haldi Brunch", when: "1st March", theme: "Pastels", note: "Soft pastels: powder blue, blush, lemon, mint and lilac.",
       palette: ["Powder Blue", "Blush", "Lemon", "Mint", "Lilac"], image: "images/wardrobe-haldi.png" },
     { event: "Wedding Ceremony", when: "1st March", theme: "Wine, blush & emerald", note: "Rich wine and soft blush with a touch of deep green.",
-      palette: ["Maroon", "Blush", "Bottle Green", "Ivory"], image: "images/wardrobe-wedding.jpg", feature: true }
+      palette: ["Maroon", "Blush", "Bottle Green", "Ivory"], image: "images/wardrobe-wedding.png", feature: true }
   ],
 
   /* ---------- Venue ----------
