@@ -109,14 +109,14 @@ window.WEDDING = {
      feature: true = the illustrated models wear this event's palette (colour 1 lehenga, 2 gown, 3 sherwani, 4 blazer & turban).
      Every other event shows its palette as colour swatches.                                                   */
   wardrobe: [
-    { event: "Mehndi Lunch", when: "28th February", theme: "Garden greens", note: "Fresh greens with a pop of pink.",
-      palette: ["Pistachio", "Mint", "Emerald", "Rani Pink"] },
+    { event: "Mehndi Lunch", when: "28th February", theme: "Shades of orange and red", note: "Warm reds, rust and marigold.",
+      palette: ["Red", "Marigold", "Coral", "Maroon"], image: "images/wardrobe-mehndi.png" },
     { event: "Engagement & Sangeet", when: "28th February", theme: "Shimmer all the way", note: "Sequins, shine and midnight tones.",
-      palette: ["Black", "Navy", "Emerald", "Silver"] },
-    { event: "Haldi Brunch", when: "1st March", theme: "Sunshine yellows", note: "Turmeric, marigold and soft peach.",
-      palette: ["Turmeric", "Peach", "Ivory", "Marigold"] },
+      palette: ["Black", "Navy", "Emerald", "Gold"], image: "images/wardrobe-sangeet.png" },
+    { event: "Haldi Brunch", when: "1st March", theme: "Pastels", note: "Soft pastels: powder blue, blush, lemon, mint and lilac.",
+      palette: ["Powder Blue", "Blush", "Lemon", "Mint", "Lilac"], image: "images/wardrobe-haldi.png" },
     { event: "Wedding Ceremony", when: "1st March", theme: "Wine, blush & emerald", note: "Rich wine and soft blush with a touch of deep green.",
-      palette: ["Maroon", "Blush", "Bottle Green", "Ivory"], feature: true, image: "images/wardrobe-wedding.jpg" }
+      palette: ["Maroon", "Blush", "Bottle Green", "Ivory"], image: "images/wardrobe-wedding.jpg", feature: true }
   ],
 
   /* ---------- Venue ----------

@@ -323,7 +323,7 @@
     figBox.appendChild(cvs);
     var figTitle = el('div', 'wfeature__txt');
     figCard.appendChild(figBox); figCard.appendChild(figTitle);
-    var rows = el('div', 'wpals');
+    var rows = el('div', 'wpals' + (list.some(function (w, i) { return w.image; }) ? ' wpals--art' : ''));
     wrap.appendChild(figCard); wrap.appendChild(rows);
     function outfitsFor(p) { return { lehenga: p[0], gown: p[1] || p[0], sherwani: p[2] || p[0], blazer: p[3] || p[1] || p[0] }; }
     function swatchList(p) {
@@ -366,6 +366,7 @@
         var r = el('div', 'wpal' + (idx === featured ? ' wpal--feat' : ''));
         r.appendChild(el('p', 'wcard__event', [wd.event, wd.when].filter(Boolean).join(' · ')));
         if (wd.theme) r.appendChild(el('h3', 'wcard__theme', wd.theme));
+        if (wd.image && idx !== featured) { var pic = el('img', 'wpal__img'); pic.src = wd.image; pic.alt = 'Outfit inspiration for ' + (wd.event || 'this event'); pic.loading = 'lazy'; r.appendChild(pic); }
         var big = el('div', 'wpal__dots');
         pals[idx].forEach(function (c) { if (!c) return; var d = el('span'); d.style.background = FX.hexOf(c); d.title = c; big.appendChild(d); });
         r.appendChild(big);

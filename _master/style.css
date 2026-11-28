@@ -363,3 +363,9 @@ main>.hero,main>.foot{z-index:auto}
 
 /* event links: directions + calendar */
 .ev__links{display:flex;flex-wrap:wrap;justify-content:center;gap:.35rem 1.2rem}
+
+/* wardrobe rows with an outfit illustration: one per line, picture full width */
+.wpals--art{grid-template-columns:1fr;max-width:760px;margin:0 auto}
+.wpal__img{display:block;width:100%;max-width:720px;height:auto;margin:14px auto 6px}
+/* opening card: the seal alone, no bow */
+.gf-bow{display:none}
