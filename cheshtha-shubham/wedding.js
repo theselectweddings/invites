@@ -75,7 +75,7 @@ window.WEDDING = {
           image: "", start: "2027-02-28T12:00:00+05:30", end: "2027-02-28T15:30:00+05:30"
         },
         {
-          name: "Engagement & Sangeet", time: "7 PM onwards", venue: "The Palm", map: "", address: "", dress: "", colour: "",
+          name: "Engagement & Sangeet", time: "7 PM onwards", venue: "The Palms Banquet Resort, Zirakpur", map: "https://www.google.com/maps/search/?api=1&query=The+Palms+Banquet+Resort+Zirakpur", address: "The Palms Banquet Resort, Chandigarh–Ambala Highway, Zirakpur, Punjab 140603", dress: "", colour: "",
           note: "",
           moments: [],
           image: "", start: "2027-02-28T19:00:00+05:30", end: "2027-03-01T01:00:00+05:30"
@@ -93,7 +93,7 @@ window.WEDDING = {
           image: "", start: "2027-03-01T11:00:00+05:30", end: "2027-03-01T14:45:00+05:30"
         },
         {
-          name: "Wedding Ceremony", time: "5 PM onwards", venue: "Farmhouse", map: "", address: "", dress: "", colour: "",
+          name: "Wedding Ceremony", time: "5 PM onwards", venue: "Garden Escape by La Palacio, Zirakpur", map: "https://www.google.com/maps/search/?api=1&query=Garden+Escape+La+Palacio+Zirakpur", address: "La Palacio, 1 Patiala Road, Utrathiya, Zirakpur, Punjab", dress: "", colour: "",
           note: "",
           moments: [],
           image: "", start: "2027-03-01T17:00:00+05:30", end: "2027-03-02T01:00:00+05:30"
