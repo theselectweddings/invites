@@ -59,6 +59,7 @@ window.WEDDING = {
   /* ---------- Events, one column per day ----------
      date: "14th February, 2027" (st/nd/rd/th become small superscripts)
      moments: optional ["time", "what happens"] list shown under "View programme"
+     venue / map / address: for an event at another venue, venue: "The Palm", map: "<Google Maps link>" (shows a 📍 Get directions button), address: "…" (used in the calendar invite)
      art: optional illustration — "mehndi" | "sangeet" | "haldi" | "pheras" | "anandkaraj" | "afterparty" | "none" (otherwise chosen from the event name)
      dress: optional dress code · start/end: for the "Add to calendar" link          */
   days: [

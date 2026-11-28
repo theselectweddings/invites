@@ -360,3 +360,6 @@ main>.hero,main>.foot{z-index:auto}
 /* ---------- theme packs: faint background pattern ---------- */
 .has-pat body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.07;background-image:var(--bg-pat);background-size:auto}
 @media (max-width:640px){.has-pat body::after{opacity:.06}}
+
+/* event links: directions + calendar */
+.ev__links{display:flex;flex-wrap:wrap;justify-content:center;gap:.35rem 1.2rem}

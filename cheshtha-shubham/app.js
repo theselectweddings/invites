@@ -282,7 +282,7 @@
     function f(s) { var d = new Date(s); return isNaN(d) ? '' : d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, ''); }
     var a = f(ev.start), b = f(ev.end); if (!a || !b) return '';
     return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(ev.name + ' · ' + W.couple.first + ' & ' + W.couple.second) +
-      '&dates=' + a + '/' + b + '&location=' + encodeURIComponent((ev.venue || W.venue.name) + ', ' + W.venue.city);
+      '&dates=' + a + '/' + b + '&location=' + encodeURIComponent(ev.address || ((ev.venue || W.venue.name) + ', ' + W.venue.city));
   }
   (W.days || []).forEach(function (day) {
     var col = el('div', 'day');
@@ -298,7 +298,11 @@
       if (ev.dress) e.appendChild(el('p', 'ev__dress', 'Dress code · ' + ev.dress));
       if (ev.note) e.appendChild(el('p', 'ev__note', ev.note));
       var link = gcal(ev);
-      if (link) { var a = el('a', 'cal', '+ Add to calendar'); a.href = link; a.target = '_blank'; a.rel = 'noopener'; e.appendChild(el('div')).appendChild(a); }
+      var links = el('div', 'ev__links');
+      // directions for events at a different venue: map = a Google Maps link to the exact place
+      if (ev.map) { var m = el('a', 'cal', '📍 Get directions'); m.href = ev.map; m.target = '_blank'; m.rel = 'noopener'; links.appendChild(m); }
+      if (link) { var a = el('a', 'cal', '+ Add to calendar'); a.href = link; a.target = '_blank'; a.rel = 'noopener'; links.appendChild(a); }
+      if (links.children.length) e.appendChild(links);
       col.appendChild(e);
     });
     $('#dayCols').appendChild(col);
